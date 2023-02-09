@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzItemDao">
+
+	<sql id="wzItemColumns">
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag",
+		a.dept_name AS "deptName",
+		a.write_date AS "writeDate",
+		a.code AS "code",
+		a.project_name AS "projectName",
+		a.applicant AS "applicant",
+		a.applicant_phone AS "applicantPhone",
+		a.category AS "category",
+		a.year_plan_code AS "yearPlanCode",
+		a.duration AS "duration",
+		a.contract_type AS "contractType",
+		a.procurement_method AS "procurementMethod",
+		a.review_method AS "reviewMethod",
+		a.budget AS "budget",
+		a.money_resource AS "moneyResource",
+		a.detailed_money AS "detailedMoney",
+		a.other_cost AS "otherCost",
+		a.taxrate AS "taxrate",
+		a.payment_method AS "paymentMethod",
+		a.over_budget AS "overBudget",
+		a.supplier AS "supplier",
+		a.project_range AS "projectRange",
+		a.project_necessity AS "projectNecessity",
+		a.status AS "status",
+		a.xqbm_man AS "xqbmMan",
+		a.xqbm_time AS "xqbmTime",
+		a.xqbm_approval AS "xqbmApproval",
+		a.zygkjb_man AS "zygkjbMan",
+		a.zygkjb_time AS "zygkjbTime",
+		a.zygkjb_approval AS "zygkjbApproval",
+		a.cggljb_man AS "cggljbMan",
+		a.cggljb_time AS "cggljbTime",
+		a.cggljb_approval AS "cggljbApproval",
+		a.cwb_man AS "cwbMan",
+		a.cwb_time AS "cwbTime",
+		a.cwb_approval AS "cwbApproval",
+		a.fgld_man AS "fgldMan",
+		a.fgld_time AS "fgldTime",
+		a.fgld_approval AS "fgldApproval",
+		a.fgcg_man AS "fgcgMan",
+		a.fgcg_time AS "fgcgTime",
+		a.fgcg_approval AS "fgcgApproval",
+		a.zygkfz_man AS "zygkfzMan",
+		a.zygkfz_time AS "zygkfzTime",
+		a.zygkfz_approval AS "zygkfzApproval",
+		a.cgglfz_man AS "cgglfzMan",
+		a.cgglfz_time AS "cgglfzTime",
+		a.cgglfz_approval AS "cgglfzApproval",
+		a.fzr_man AS "fzrMan",
+		a.fzr_time AS "fzrTime",
+		a.fzr_approval AS "fzrApproval",
+		a.applicant_code AS "applicantCode",
+		a.rlwz_man AS "rlwzMan",
+		a.receive_time AS "receiveTime",
+		a.rlwz_man_id AS "rlwzManId",
+		a.other_taxrate AS "otherTaxrate",
+		a.scoring AS "scoring",
+		a.end_time AS "endTime",
+		a.plan_status AS "planStatus",
+		a.applicant_company AS "applicantCompany",
+		a.remark AS "remark",
+		a.stop_reason AS "stopReason",
+		a.xqsp_id AS "xqspId",
+		a.xqsp_name AS "xqspName",
+		a.zyjb_id AS "zyjbId",
+		a.zyjb_name AS "zyjbName",
+		a.zyfz_id AS "zyfzId",
+		a.zyfz_name AS "zyfzName",
+		a.cg_id AS "cgId",
+		a.cg_name AS "cgName",
+		a.yw_id AS "ywId",
+		a.yw_name AS "ywName",
+		a.isgenerate AS "isgenerate",
+		a.glbmjb_id AS "glbmjbId",
+		a.glbmjb_name AS "glbmjbName",
+		a.glbmfz_id AS "glbmfzId",
+		a.glbmfz_name AS "glbmfzName",
+		a.cwb_id AS "cwbId",
+		a.cwb_name AS "cwbName",
+		a.fzr_id AS "fzrId",
+		a.fzr_name AS "fzrName",
+		a.classification AS "classification",
+		a.stage AS "stage",
+		a.whether_metting AS "whetherMetting",
+		a.more_reason AS "moreReason",
+		a.metting_name AS "mettingName",
+		a.plan_basis AS "planBasis",
+		a.plan_start_time AS "planStartTime",
+		a.contract_period AS "contractPeriod",
+		a.plan_number AS "planNumber",
+		a.three_cost AS "threeCost"
+	</sql>
+
+	<sql id="wzItemJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="status != null and status != ''">
+                AND a.status = #{status}
+            </if>
+            <if test="isgenerate != null and isgenerate != ''">
+                AND a.isgenerate = #{isgenerate}
+            </if>
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzItem">
+		SELECT
+			<include refid="wzItemColumns"/>
+		FROM wz_item a
+		<include refid="wzItemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzItem">
+		SELECT
+			<include refid="wzItemColumns"/>
+		FROM wz_item a
+		<include refid="wzItemJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+                order by status = '0' desc,status = 'spbh' desc,status='1' desc, status='2' desc,status='3' desc,status='4' desc,status='5' desc,status='6' desc, status='7' desc,status='8' desc,status='9' desc,status='10' desc,status='11' desc,status='12' desc,status='xmzz' desc,create_date desc
+            </otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzItem">
+		SELECT
+			<include refid="wzItemColumns"/>
+		FROM wz_item a
+		<include refid="wzItemJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+            <otherwise>
+            </otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        tenant_id,
+	        create_by,
+	        create_by_name,
+	        create_date,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        del_flag,
+	        dept_name,
+	        write_date,
+	        code,
+	        project_name,
+	        applicant,
+	        applicant_phone,
+	        category,
+	        year_plan_code,
+	        duration,
+	        contract_type,
+	        procurement_method,
+	        review_method,
+	        budget,
+	        money_resource,
+	        detailed_money,
+	        other_cost,
+	        taxrate,
+	        payment_method,
+	        over_budget,
+	        supplier,
+	        project_range,
+	        project_necessity,
+	        status,
+	        xqbm_man,
+	        xqbm_time,
+	        xqbm_approval,
+	        zygkjb_man,
+	        zygkjb_time,
+	        zygkjb_approval,
+	        cggljb_man,
+	        cggljb_time,
+	        cggljb_approval,
+	        cwb_man,
+	        cwb_time,
+	        cwb_approval,
+	        fgld_man,
+	        fgld_time,
+	        fgld_approval,
+	        fgcg_man,
+	        fgcg_time,
+	        fgcg_approval,
+	        zygkfz_man,
+	        zygkfz_time,
+	        zygkfz_approval,
+	        cgglfz_man,
+	        cgglfz_time,
+	        cgglfz_approval,
+	        fzr_man,
+	        fzr_time,
+	        fzr_approval,
+	        applicant_code,
+	        rlwz_man,
+	        receive_time,
+	        rlwz_man_id,
+	        other_taxrate,
+	        scoring,
+	        end_time,
+	        plan_status,
+	        applicant_company,
+	        remark,
+	        stop_reason,
+	        xqsp_id,
+	        xqsp_name,
+	        zyjb_id,
+	        zyjb_name,
+	        zyfz_id,
+	        zyfz_name,
+	        cg_id,
+	        cg_name,
+	        yw_id,
+	        yw_name,
+	        isgenerate,
+	        glbmjb_id,
+	        glbmjb_name,
+	        glbmfz_id,
+	        glbmfz_name,
+	        cwb_id,
+	        cwb_name,
+	        fzr_id,
+	        fzr_name,
+	        classification,
+	        stage,
+	        whether_metting,
+	        more_reason,
+	        metting_name,
+	        plan_basis,
+	        plan_start_time,
+	        contract_period,
+	        plan_number,
+	        three_cost
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_item','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_item(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{tenantId},
+			#{createBy},
+			#{createByName},
+			#{createDate},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{delFlag},
+			#{deptName},
+			#{writeDate},
+			#{code},
+			#{projectName},
+			#{applicant},
+			#{applicantPhone},
+			#{category},
+			#{yearPlanCode},
+			#{duration},
+			#{contractType},
+			#{procurementMethod},
+			#{reviewMethod},
+			#{budget},
+			#{moneyResource},
+			#{detailedMoney},
+			#{otherCost},
+			#{taxrate},
+			#{paymentMethod},
+			#{overBudget},
+			#{supplier},
+			#{projectRange},
+			#{projectNecessity},
+			#{status},
+			#{xqbmMan},
+			#{xqbmTime},
+			#{xqbmApproval},
+			#{zygkjbMan},
+			#{zygkjbTime},
+			#{zygkjbApproval},
+			#{cggljbMan},
+			#{cggljbTime},
+			#{cggljbApproval},
+			#{cwbMan},
+			#{cwbTime},
+			#{cwbApproval},
+			#{fgldMan},
+			#{fgldTime},
+			#{fgldApproval},
+			#{fgcgMan},
+			#{fgcgTime},
+			#{fgcgApproval},
+			#{zygkfzMan},
+			#{zygkfzTime},
+			#{zygkfzApproval},
+			#{cgglfzMan},
+			#{cgglfzTime},
+			#{cgglfzApproval},
+			#{fzrMan},
+			#{fzrTime},
+			#{fzrApproval},
+			#{applicantCode},
+			#{rlwzMan},
+			#{receiveTime},
+			#{rlwzManId},
+			#{otherTaxrate},
+			#{scoring},
+			#{endTime},
+			#{planStatus},
+			#{applicantCompany},
+			#{remark},
+			#{stopReason},
+			#{xqspId},
+			#{xqspName},
+			#{zyjbId},
+			#{zyjbName},
+			#{zyfzId},
+			#{zyfzName},
+			#{cgId},
+			#{cgName},
+			#{ywId},
+			#{ywName},
+			#{isgenerate},
+			#{glbmjbId},
+			#{glbmjbName},
+			#{glbmfzId},
+			#{glbmfzName},
+			#{cwbId},
+			#{cwbName},
+			#{fzrId},
+			#{fzrName},
+			#{classification},
+			#{stage},
+			#{whetherMetting},
+			#{moreReason},
+			#{mettingName},
+			#{planBasis},
+			#{planStartTime},
+			#{contractPeriod},
+			#{planNumber},
+			#{threeCost}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_item','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_item(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createByName} as "createByName",
+                    #{item.createDate} as "createDate",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.delFlag} as "delFlag",
+                    #{item.deptName} as "deptName",
+                    #{item.writeDate, jdbcType=TIMESTAMP} as "writeDate",
+                    #{item.code} as "code",
+                    #{item.projectName} as "projectName",
+                    #{item.applicant} as "applicant",
+                    #{item.applicantPhone} as "applicantPhone",
+                    #{item.category} as "category",
+                    #{item.yearPlanCode} as "yearPlanCode",
+                    #{item.duration} as "duration",
+                    #{item.contractType} as "contractType",
+                    #{item.procurementMethod} as "procurementMethod",
+                    #{item.reviewMethod} as "reviewMethod",
+                    #{item.budget} as "budget",
+                    #{item.moneyResource} as "moneyResource",
+                    #{item.detailedMoney} as "detailedMoney",
+                    #{item.otherCost} as "otherCost",
+                    #{item.taxrate} as "taxrate",
+                    #{item.paymentMethod} as "paymentMethod",
+                    #{item.overBudget} as "overBudget",
+                    #{item.supplier} as "supplier",
+                    #{item.projectRange} as "projectRange",
+                    #{item.projectNecessity} as "projectNecessity",
+                    #{item.status} as "status",
+                    #{item.xqbmMan} as "xqbmMan",
+                    #{item.xqbmTime, jdbcType=TIMESTAMP} as "xqbmTime",
+                    #{item.xqbmApproval} as "xqbmApproval",
+                    #{item.zygkjbMan} as "zygkjbMan",
+                    #{item.zygkjbTime, jdbcType=TIMESTAMP} as "zygkjbTime",
+                    #{item.zygkjbApproval} as "zygkjbApproval",
+                    #{item.cggljbMan} as "cggljbMan",
+                    #{item.cggljbTime, jdbcType=TIMESTAMP} as "cggljbTime",
+                    #{item.cggljbApproval} as "cggljbApproval",
+                    #{item.cwbMan} as "cwbMan",
+                    #{item.cwbTime, jdbcType=TIMESTAMP} as "cwbTime",
+                    #{item.cwbApproval} as "cwbApproval",
+                    #{item.fgldMan} as "fgldMan",
+                    #{item.fgldTime, jdbcType=TIMESTAMP} as "fgldTime",
+                    #{item.fgldApproval} as "fgldApproval",
+                    #{item.fgcgMan} as "fgcgMan",
+                    #{item.fgcgTime, jdbcType=TIMESTAMP} as "fgcgTime",
+                    #{item.fgcgApproval} as "fgcgApproval",
+                    #{item.zygkfzMan} as "zygkfzMan",
+                    #{item.zygkfzTime, jdbcType=TIMESTAMP} as "zygkfzTime",
+                    #{item.zygkfzApproval} as "zygkfzApproval",
+                    #{item.cgglfzMan} as "cgglfzMan",
+                    #{item.cgglfzTime, jdbcType=TIMESTAMP} as "cgglfzTime",
+                    #{item.cgglfzApproval} as "cgglfzApproval",
+                    #{item.fzrMan} as "fzrMan",
+                    #{item.fzrTime, jdbcType=TIMESTAMP} as "fzrTime",
+                    #{item.fzrApproval} as "fzrApproval",
+                    #{item.applicantCode} as "applicantCode",
+                    #{item.rlwzMan} as "rlwzMan",
+                    #{item.receiveTime, jdbcType=TIMESTAMP} as "receiveTime",
+                    #{item.rlwzManId} as "rlwzManId",
+                    #{item.otherTaxrate} as "otherTaxrate",
+                    #{item.scoring} as "scoring",
+                    #{item.endTime, jdbcType=TIMESTAMP} as "endTime",
+                    #{item.planStatus} as "planStatus",
+                    #{item.applicantCompany} as "applicantCompany",
+                    #{item.remark} as "remark",
+                    #{item.stopReason} as "stopReason",
+                    #{item.xqspId} as "xqspId",
+                    #{item.xqspName} as "xqspName",
+                    #{item.zyjbId} as "zyjbId",
+                    #{item.zyjbName} as "zyjbName",
+                    #{item.zyfzId} as "zyfzId",
+                    #{item.zyfzName} as "zyfzName",
+                    #{item.cgId} as "cgId",
+                    #{item.cgName} as "cgName",
+                    #{item.ywId} as "ywId",
+                    #{item.ywName} as "ywName",
+                    #{item.isgenerate} as "isgenerate",
+                    #{item.glbmjbId} as "glbmjbId",
+                    #{item,glbmjbName} as "glbmjbName",
+                    #{item.glbmfzId} as "glbmfzId",
+                    #{item.glbmfzName} as "glbmfzName",
+                    #{item.cwbId} as "cwbId",
+                    #{item.cwbName} as "cwbName",
+                    #{item.fzrId} as "fzrId",
+                    #{item.fzrName} as "fzrName",
+                    #{item.classification} as "classification",
+                    #{item.stage} as "stage",
+                    #{item.whetherMetting} as "whetherMetting",
+                    #{item.moreReason} as "moreReason",
+                    #{item.mettingName} as "mettingName",
+                    #{item.planBasis} as "planBasis",
+                    #{item.planStartTime} as "planStartTime",
+                    #{item.contractPeriod} as "contractPeriod",
+                    #{item.planNumber} as "planNumber",
+                    #{item.threeCost} as "threeCost"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_item SET
+			id = #{id},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			dept_name = #{deptName},
+			write_date = #{writeDate},
+			code = #{code},
+			project_name = #{projectName},
+			applicant = #{applicant},
+			applicant_phone = #{applicantPhone},
+			category = #{category},
+			year_plan_code = #{yearPlanCode},
+			duration = #{duration},
+			contract_type = #{contractType},
+			procurement_method = #{procurementMethod},
+			review_method = #{reviewMethod},
+			budget = #{budget},
+			money_resource = #{moneyResource},
+			detailed_money = #{detailedMoney},
+			other_cost = #{otherCost},
+			taxrate = #{taxrate},
+			payment_method = #{paymentMethod},
+			over_budget = #{overBudget},
+			supplier = #{supplier},
+			project_range = #{projectRange},
+			project_necessity = #{projectNecessity},
+			status = #{status},
+			xqbm_man = #{xqbmMan},
+			xqbm_time = #{xqbmTime},
+			xqbm_approval = #{xqbmApproval},
+			zygkjb_man = #{zygkjbMan},
+			zygkjb_time = #{zygkjbTime},
+			zygkjb_approval = #{zygkjbApproval},
+			cggljb_man = #{cggljbMan},
+			cggljb_time = #{cggljbTime},
+			cggljb_approval = #{cggljbApproval},
+			cwb_man = #{cwbMan},
+			cwb_time = #{cwbTime},
+			cwb_approval = #{cwbApproval},
+			fgld_man = #{fgldMan},
+			fgld_time = #{fgldTime},
+			fgld_approval = #{fgldApproval},
+			fgcg_man = #{fgcgMan},
+			fgcg_time = #{fgcgTime},
+			fgcg_approval = #{fgcgApproval},
+			zygkfz_man = #{zygkfzMan},
+			zygkfz_time = #{zygkfzTime},
+			zygkfz_approval = #{zygkfzApproval},
+			cgglfz_man = #{cgglfzMan},
+			cgglfz_time = #{cgglfzTime},
+			cgglfz_approval = #{cgglfzApproval},
+			fzr_man = #{fzrMan},
+			fzr_time = #{fzrTime},
+			fzr_approval = #{fzrApproval},
+			applicant_code = #{applicantCode},
+			rlwz_man = #{rlwzMan},
+			receive_time = #{receiveTime},
+			rlwz_man_id = #{rlwzManId},
+			other_taxrate = #{otherTaxrate},
+			scoring = #{scoring},
+			end_time = #{endTime},
+			plan_status = #{planStatus},
+			applicant_company = #{applicantCompany},
+			remark = #{remark},
+			stop_reason = #{stopReason},
+			xqsp_id = #{xqspId},
+			xqsp_name = #{xqspName},
+			zyjb_id = #{zyjbId},
+			zyjb_name = #{zyjbName},
+			zyfz_id = #{zyfzId},
+			zyfz_name = #{zyfzName},
+			cg_id = #{cgId},
+			cg_name = #{cgName},
+			yw_id = #{ywId},
+			yw_name = #{ywName},
+			isgenerate = #{isgenerate},
+			glbmjb_id = #{glbmjbId},
+			glbmjb_name = #{glbmjbName},
+			glbmfz_id = #{glbmfzId},
+			glbmfz_name = #{glbmfzName},
+			cwb_id = #{cwbId},
+			cwb_name = #{cwbName},
+			fzr_id = #{fzrId},
+			fzr_name = #{fzrName},
+			classification = #{classification},
+			stage = #{stage},
+			whether_metting = #{whetherMetting},
+			more_reason = #{moreReason},
+			metting_name = #{mettingName},
+			plan_basis = #{planBasis},
+			plan_start_time = #{planStartTime},
+			contract_period = #{contractPeriod},
+			plan_number = #{planNumber},
+			three_cost = #{threeCost}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_item
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+    <select id="getMaxCode" resultType="String">
+        select max(reverse(substr(reverse(code),1,3))) from wz_item where 1=1
+        <if test="createDate !=null and createDate !=''">
+            <bind name="day" value="createDate+'%'"/>
+            and create_date like #{day}
+        </if>
+
+    </select>
+
+</mapper>

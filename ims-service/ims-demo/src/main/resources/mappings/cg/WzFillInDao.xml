@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzFillInDao">
+
+	<sql id="wzFillInColumns">
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag",
+		a.agreement_money AS "agreementMoney",
+		a.declare_number AS "declareNumber",
+		a.declare_no_number AS "declareNoNumber",
+		a.review_number AS "reviewNumber",
+		a.review_no_number AS "reviewNoNumber",
+		a.use_number AS "useNumber",
+		a.use_no_number AS "useNoNumber",
+		a.bidding_number AS "biddingNumber",
+		a.bidding_success_number AS "biddingSuccessNumber",
+		a.stock_money AS "stockMoney"
+	</sql>
+
+	<sql id="wzFillInJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzFillIn">
+		SELECT
+			<include refid="wzFillInColumns"/>
+		FROM wz_fill_in a
+		<include refid="wzFillInJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzFillIn">
+		SELECT
+			<include refid="wzFillInColumns"/>
+		FROM wz_fill_in a
+		<include refid="wzFillInJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzFillIn">
+		SELECT
+			<include refid="wzFillInColumns"/>
+		FROM wz_fill_in a
+		<include refid="wzFillInJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        tenant_id,
+	        create_by,
+	        create_by_name,
+	        create_date,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        del_flag,
+	        agreement_money,
+	        declare_number,
+	        declare_no_number,
+	        review_number,
+	        review_no_number,
+	        use_number,
+	        use_no_number,
+	        bidding_number,
+	        bidding_success_number,
+	        stock_money
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_fill_in','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_fill_in(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{tenantId},
+			#{createBy},
+			#{createByName},
+			#{createDate},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{delFlag},
+			#{agreementMoney},
+			#{declareNumber},
+			#{declareNoNumber},
+			#{reviewNumber},
+			#{reviewNoNumber},
+			#{useNumber},
+			#{useNoNumber},
+			#{biddingNumber},
+			#{biddingSuccessNumber},
+			#{stockMoney}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_fill_in','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_fill_in(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createByName} as "createByName",
+                    #{item.createDate} as "createDate",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.delFlag} as "delFlag",
+                    #{item.agreementMoney} as "agreementMoney",
+                    #{item.declareNumber} as "declareNumber",
+                    #{item.declareNoNumber} as "declareNoNumber",
+                    #{item.reviewNumber} as "reviewNumber",
+                    #{item.reviewNoNumber} as "reviewNoNumber",
+                    #{item.useNumber} as "useNumber",
+                    #{item.useNoNumber} as "useNoNumber",
+                    #{item.biddingNumber} as "biddingNumber",
+                    #{item.biddingSuccessNumber} as "biddingSuccessNumber",
+                    #{item.stockMoney} as "stockMoney"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_fill_in SET
+			id = #{id},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			agreement_money = #{agreementMoney},
+			declare_number = #{declareNumber},
+			declare_no_number = #{declareNoNumber},
+			review_number = #{reviewNumber},
+			review_no_number = #{reviewNoNumber},
+			use_number = #{useNumber},
+			use_no_number = #{useNoNumber},
+			bidding_number = #{biddingNumber},
+			bidding_success_number = #{biddingSuccessNumber},
+			stock_money = #{stockMoney}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_fill_in
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+    <select id="getSelectIndexValue" resultType="Float">
+        select sum(cast(d_value as float)) as d_value from wz_index_value a where a.index_code = #{indexCode} and a.org_id = #{orgId} and a.d_value != ''
+        <if test="time !=null and time !=''">
+            <bind name="time" value="time+'%'"/>
+            and time like #{time}
+        </if>
+    </select>
+
+</mapper>

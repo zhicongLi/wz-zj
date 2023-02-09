@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzIndexDetailedDao">
+
+	<sql id="wzIndexDetailedColumns">
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag",
+		a.index_name AS "indexName",
+		a.index_code AS "indexCode",
+		a.index_type AS "indexType",
+		a.index_type_code AS "indexTypeCode",
+		a.company AS "company",
+		a.time_dimension AS "timeDimension",
+		a.calculation_dimension AS "calculationDimension",
+		a.organization_dimension AS "organizationDimension",
+		a.formula AS "formula",
+		a.remark AS "remark",
+		a.source_surface AS "sourceSurface",
+		a.source_field AS "sourceField"
+	</sql>
+
+	<sql id="wzIndexDetailedJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzIndexDetailed">
+		SELECT
+			<include refid="wzIndexDetailedColumns"/>
+		FROM wz_index_detailed a
+		<include refid="wzIndexDetailedJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzIndexDetailed">
+		SELECT
+			<include refid="wzIndexDetailedColumns"/>
+		FROM wz_index_detailed a
+		<include refid="wzIndexDetailedJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzIndexDetailed">
+		SELECT
+			<include refid="wzIndexDetailedColumns"/>
+		FROM wz_index_detailed a
+		<include refid="wzIndexDetailedJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        tenant_id,
+	        create_by,
+	        create_by_name,
+	        create_date,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        del_flag,
+	        index_name,
+	        index_code,
+	        index_type,
+	        index_type_code,
+	        company,
+	        time_dimension,
+	        calculation_dimension,
+	        organization_dimension,
+	        formula,
+	        remark,
+	        source_surface,
+	        source_field
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_index_detailed','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_index_detailed(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{tenantId},
+			#{createBy},
+			#{createByName},
+			#{createDate},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{delFlag},
+			#{indexName},
+			#{indexCode},
+			#{indexType},
+			#{indexTypeCode},
+			#{company},
+			#{timeDimension},
+			#{calculationDimension},
+			#{organizationDimension},
+			#{formula},
+			#{remark},
+			#{sourceSurface},
+			#{sourceField}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_index_detailed','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_index_detailed(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createByName} as "createByName",
+                    #{item.createDate} as "createDate",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.delFlag} as "delFlag",
+                    #{item.indexName} as "indexName",
+                    #{item.indexCode} as "indexCode",
+                    #{item.indexType} as "indexType",
+                    #{item.indexTypeCode} as "indexTypeCode",
+                    #{item.company} as "company",
+                    #{item.timeDimension} as "timeDimension",
+                    #{item.calculationDimension} as "calculationDimension",
+                    #{item.organizationDimension} as "organizationDimension",
+                    #{item.formula} as "formula",
+                    #{item.remark} as "remark",
+                    #{item.sourceSurface} as "sourceSurface",
+                    #{item.sourceField} as "sourceField"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_index_detailed SET
+			id = #{id},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			index_name = #{indexName},
+			index_code = #{indexCode},
+			index_type = #{indexType},
+			index_type_code = #{indexTypeCode},
+			company = #{company},
+			time_dimension = #{timeDimension},
+			calculation_dimension = #{calculationDimension},
+			organization_dimension = #{organizationDimension},
+			formula = #{formula},
+			remark = #{remark},
+			source_surface = #{sourceSurface},
+			source_field = #{sourceField}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_index_detailed
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+</mapper>

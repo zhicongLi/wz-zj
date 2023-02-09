@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzNoticeMainDao">
+
+	<sql id="wzNoticeMainColumns">
+		a.id AS "id",
+		a.status AS "status",
+		a.approval_node AS "approvalNode",
+		a.number AS "number",
+		a.send_name AS "sendName",
+		a.send_company AS "sendCompany",
+		a.create_by_name AS "createByName",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+        a.project_name AS "projectName",
+        a.project_file AS "projectFile",
+        a.zygk_id AS "zygkId",
+        a.zygk_name AS "zygkName",
+        a.emergency_order AS "emergencyOrder",
+        a.stop_reason AS "stopReason"
+	</sql>
+
+	<sql id="wzNoticeMainJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzNoticeMain">
+		SELECT
+			<include refid="wzNoticeMainColumns"/>
+		FROM wz_notice_main a
+		<include refid="wzNoticeMainJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzNoticeMain">
+		SELECT
+			<include refid="wzNoticeMainColumns"/>
+		FROM wz_notice_main a
+		<include refid="wzNoticeMainJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+                ORDER BY a.approval_node = '0' DESC, a.approval_node = '6' DESC, a.approval_node = '1' DESC, a.approval_node = '2' DESC, a.approval_node = '5' DESC, a.approval_node = '3' DESC, a.approval_node = '4' DESC, a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzNoticeMain">
+		SELECT
+			<include refid="wzNoticeMainColumns"/>
+		FROM wz_notice_main a
+		<include refid="wzNoticeMainJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        status,
+	        approval_node,
+	        number,
+	        send_name,
+	        send_company,
+	        create_by_name,
+	        tenant_id,
+	        create_by,
+	        create_date,
+	        del_flag,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+            project_name,
+            project_file,
+            zygk_id,
+            zygk_name,
+            emergency_order,
+            stop_reason
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_notice_main','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_notice_main(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{status},
+			#{approvalNode},
+			#{number},
+			#{sendName},
+			#{sendCompany},
+			#{createByName},
+			#{tenantId},
+			#{createBy},
+			#{createDate},
+			#{delFlag},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+		    #{projectName},
+		    #{projectFile},
+            #{zygkId},
+            #{zygkName},
+            #{emergencyOrder},
+            #{stopReason}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_notice_main','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_notice_main(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.status} as "status",
+                    #{item.approvalNode} as "approvalNode",
+                    #{item.number} as "number",
+                    #{item.sendName} as "sendName",
+                    #{item.sendCompany} as "sendCompany",
+                    #{item.createByName} as "createByName",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createDate} as "createDate",
+                    #{item.delFlag} as "delFlag",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.projectName} as "projectName",
+                    #{item.projectFile} as "projectFile",
+                    #{item.zygkId} as "zygkId",
+                    #{item.zygkName} as "zygkName",
+                    #{item.emergencyOrder} as "emergencyOrder",
+                    #{item.stopReason} as "stopReason"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_notice_main SET
+			id = #{id},
+			status = #{status},
+			approval_node = #{approvalNode},
+			number = #{number},
+			send_name = #{sendName},
+			send_company = #{sendCompany},
+			tenant_id = #{tenantId},
+		    project_name = #{projectName},
+		    project_file = #{projectFile},
+		    zygk_id = #{zygkId},
+		    zygk_name = #{zygkName},
+		    emergency_order = #{emergencyOrder},
+		    stop_reason = #{stopReason}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_notice_main
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+    <select id="getMaxCode" resultType="String">
+        select max(reverse(substr(reverse(number),1,3))) from wz_notice_main where 1=1
+        <if test="createDate !=null and createDate !=''">
+            <bind name="day" value="createDate+'%'"/>
+            and create_date like #{day}
+        </if>
+
+    </select>
+
+</mapper>

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzNoticeSonDao">
+
+	<sql id="wzNoticeSonColumns">
+		a.id AS "id",
+		a.serial_number AS "serialNumber",
+		a.demand_describe AS "demandDescribe",
+		a.demand_number AS "demandNumber",
+		a.plan_category_name AS "planCategoryName",
+		a.subcontract_number AS "subcontractNumber",
+		a.material_number AS "materialNumber",
+		a.material_describe AS "materialDescribe",
+		a.demand_quantity AS "demandQuantity",
+		a.unit AS "unit",
+		a.unit_price AS "unitPrice",
+		a.total_price AS "totalPrice",
+		a.brand AS "brand",
+		a.isreplace AS "isreplace",
+		a.other_requirement AS "otherRequirement",
+		a.cnwzcg_approval AS "cnwzcgApproval",
+		a.hdcgzx_approval AS "hdcgzxApproval",
+		a.jsgs_approval AS "jsgsApproval",
+		a.comment_reply AS "commentReply",
+		a.reply_review AS "replyReview",
+		a.money_type AS "moneyType",
+		a.demand_date AS "demandDate",
+		a.contacts AS "contacts",
+		a.contacts_phone AS "contactsPhone",
+		a.purchase_requisition AS "purchaseRequisition",
+		a.remark AS "remark",
+		a.proposal_number AS "proposalNumber",
+		a.distribution_number AS "distributionNumber",
+		a.submit_date AS "submitDate",
+		a.transfer_application AS "transferApplication",
+		a.transfer_application_project AS "transferApplicationProject",
+		a.rejection_number AS "rejectionNumber",
+		a.purchaser AS "purchaser",
+		a.parent_id AS "parentId",
+		a.create_by_name AS "createByName",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.result_id AS "resultId"
+	</sql>
+
+	<sql id="wzNoticeSonJoins">
+		LEFT JOIN wz_notice_main b ON b.id = a.parent_id
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="parentId != null and parentId != ''">
+				AND a.parent_id = #{parentId}
+			</if>
+            <if test="resultId != null and resultId != ''">
+                AND a.result_id = #{resultId}
+            </if>
+		    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzNoticeSon">
+		SELECT
+			<include refid="wzNoticeSonColumns"/>
+		FROM wz_notice_son a
+		<include refid="wzNoticeSonJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzNoticeSon">
+		SELECT
+			<include refid="wzNoticeSonColumns"/>
+		FROM wz_notice_son a
+		<include refid="wzNoticeSonJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                <if test="page.orderBy == 'serial_number asc'">
+                    ORDER BY cast(serial_number as integer)
+                </if>
+                <if test="page.orderBy == 'serial_number desc'">
+                    ORDER BY cast(serial_number as integer) DESC
+                </if>
+                <if test="page.orderBy == 'subcontract_number asc'">
+                    ORDER BY cast(subcontract_number as integer)
+                </if>
+                <if test="page.orderBy == 'subcontract_number desc'">
+                    ORDER BY cast(subcontract_number as integer) DESC
+                </if>
+                <if test="page.orderBy != 'serial_number asc' and page.orderBy != 'serial_number desc' and page.orderBy != 'subcontract_number asc' and page.orderBy != 'subcontract_number desc'">
+                    ORDER BY ${page.orderBy}
+                </if>
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzNoticeSon">
+		SELECT
+			<include refid="wzNoticeSonColumns"/>
+		FROM wz_notice_son a
+		<include refid="wzNoticeSonJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        serial_number,
+	        demand_describe,
+	        demand_number,
+	        plan_category_name,
+	        subcontract_number,
+	        material_number,
+	        material_describe,
+	        demand_quantity,
+	        unit,
+	        unit_price,
+	        total_price,
+	        brand,
+	        isreplace,
+	        other_requirement,
+	        cnwzcg_approval,
+	        hdcgzx_approval,
+	        jsgs_approval,
+	        comment_reply,
+	        reply_review,
+	        money_type,
+	        demand_date,
+	        contacts,
+	        contacts_phone,
+	        purchase_requisition,
+	        remark,
+	        proposal_number,
+	        distribution_number,
+	        submit_date,
+	        transfer_application,
+	        transfer_application_project,
+	        rejection_number,
+	        purchaser,
+	        parent_id,
+	        create_by_name,
+	        tenant_id,
+	        create_by,
+	        create_date,
+	        del_flag,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        result_id
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_notice_son','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_notice_son(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+            #{serialNumber},
+			#{demandDescribe},
+			#{demandNumber},
+			#{planCategoryName},
+			#{subcontractNumber},
+			#{materialNumber},
+			#{materialDescribe},
+			#{demandQuantity},
+			#{unit},
+			#{unitPrice},
+			#{totalPrice},
+			#{brand},
+			#{isreplace},
+			#{otherRequirement},
+			#{cnwzcgApproval},
+			#{hdcgzxApproval},
+			#{jsgsApproval},
+			#{commentReply},
+			#{replyReview},
+			#{moneyType},
+			#{demandDate},
+			#{contacts},
+			#{contactsPhone},
+			#{purchaseRequisition},
+			#{remark},
+			#{proposalNumber},
+			#{distributionNumber},
+			#{submitDate},
+			#{transferApplication},
+			#{transferApplicationProject},
+			#{rejectionNumber},
+			#{purchaser},
+			#{parentId},
+			#{createByName},
+			#{tenantId},
+			#{createBy},
+			#{createDate},
+			#{delFlag},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{resultId}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_notice_son','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_notice_son(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.serialNumber} as "serialNumber",
+                    #{item.demandDescribe} as "demandDescribe",
+                    #{item.demandNumber} as "demandNumber",
+                    #{item.planCategoryName} as "planCategoryName",
+                    #{item.subcontractNumber} as "subcontractNumber",
+                    #{item.materialNumber} as "materialNumber",
+                    #{item.materialDescribe} as "materialDescribe",
+                    #{item.demandQuantity} as "demandQuantity",
+                    #{item.unit} as "unit",
+                    #{item.unitPrice} as "unitPrice",
+                    #{item.totalPrice} as "totalPrice",
+                    #{item.brand} as "brand",
+                    #{item.isreplace} as "isreplace",
+                    #{item.otherRequirement} as "otherRequirement",
+                    #{item.cnwzcgApproval} as "cnwzcgApproval",
+                    #{item.hdcgzxApproval} as "hdcgzxApproval",
+                    #{item.jsgsApproval} as "jsgsApproval",
+                    #{item.commentReply} as "commentReply",
+                    #{item.replyReview} as "replyReview",
+                    #{item.moneyType} as "moneyType",
+                    #{item.demandDate, jdbcType=TIMESTAMP} as "demandDate",
+                    #{item.contacts} as "contacts",
+                    #{item.contactsPhone} as "contactsPhone",
+                    #{item.purchaseRequisition} as "purchaseRequisition",
+                    #{item.remark} as "remark",
+                    #{item.proposalNumber} as "proposalNumber",
+                    #{item.distributionNumber} as "distributionNumber",
+                    #{item.submitDate} as "submitDate",
+                    #{item.transferApplication} as "transferApplication",
+                    #{item.transferApplicationProject} as "transferApplicationProject",
+                    #{item.rejectionNumber} as "rejectionNumber",
+                    #{item.purchaser} as "purchaser",
+                    #{item.parentId} as "parentId",
+                    #{item.createByName} as "createByName",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createDate} as "createDate",
+                    #{item.delFlag} as "delFlag",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.resultId} as "resultId"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_notice_son SET
+			id = #{id},
+			serial_number = #{serialNumber},
+			demand_describe = #{demandDescribe},
+			demand_number = #{demandNumber},
+			plan_category_name = #{planCategoryName},
+			subcontract_number = #{subcontractNumber},
+			material_number = #{materialNumber},
+			material_describe = #{materialDescribe},
+			demand_quantity = #{demandQuantity},
+			unit = #{unit},
+			unit_price = #{unitPrice},
+			total_price = #{totalPrice},
+			brand = #{brand},
+			isreplace = #{isreplace},
+			other_requirement = #{otherRequirement},
+			cnwzcg_approval = #{cnwzcgApproval},
+			hdcgzx_approval = #{hdcgzxApproval},
+			jsgs_approval = #{jsgsApproval},
+			comment_reply = #{commentReply},
+			reply_review = #{replyReview},
+			money_type = #{moneyType},
+			demand_date = #{demandDate},
+			contacts = #{contacts},
+			contacts_phone = #{contactsPhone},
+			purchase_requisition = #{purchaseRequisition},
+			remark = #{remark},
+			proposal_number = #{proposalNumber},
+			distribution_number = #{distributionNumber},
+			submit_date = #{submitDate},
+			transfer_application = #{transferApplication},
+			transfer_application_project = #{transferApplicationProject},
+			rejection_number = #{rejectionNumber},
+			purchaser = #{purchaser},
+			parent_id = #{parentId},
+			tenant_id = #{tenantId},
+			result_id = #{resultId}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_notice_son
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+				parent_id = #{parentId}
+			</otherwise>
+		</choose>
+	</update>
+
+</mapper>

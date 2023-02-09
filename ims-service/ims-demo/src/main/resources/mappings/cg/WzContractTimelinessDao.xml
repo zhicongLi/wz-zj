@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzContractTimelinessDao">
+
+	<sql id="wzContractTimelinessColumns">
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag",
+		a.company_name AS "companyName",
+		a.contract_number AS "contractNumber",
+		a.contract_name AS "contractName",
+		a.deal_date AS "dealDate",
+		a.pass_date AS "passDate",
+		a.authorize_date AS "authorizeDate",
+		a.standard_duration AS "standardDuration",
+		a.actual_duration AS "actualDuration",
+		a.bid_money AS "bidMoney",
+		a.contract_money AS "contractMoney",
+		a.dimension_time AS "dimensionTime"
+	</sql>
+
+	<sql id="wzContractTimelinessJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzContractTimeliness">
+		SELECT
+			<include refid="wzContractTimelinessColumns"/>
+		FROM wz_contract_timeliness a
+		<include refid="wzContractTimelinessJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzContractTimeliness">
+		SELECT
+			<include refid="wzContractTimelinessColumns"/>
+		FROM wz_contract_timeliness a
+		<include refid="wzContractTimelinessJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzContractTimeliness">
+		SELECT
+			<include refid="wzContractTimelinessColumns"/>
+		FROM wz_contract_timeliness a
+		<include refid="wzContractTimelinessJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        tenant_id,
+	        create_by,
+	        create_by_name,
+	        create_date,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        del_flag,
+	        company_name,
+	        contract_number,
+	        contract_name,
+	        deal_date,
+	        pass_date,
+	        authorize_date,
+	        standard_duration,
+	        actual_duration,
+	        bid_money,
+	        contract_money,
+	        dimension_time
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_contract_timeliness','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_contract_timeliness(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{tenantId},
+			#{createBy},
+			#{createByName},
+			#{createDate},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{delFlag},
+			#{companyName},
+			#{contractNumber},
+			#{contractName},
+			#{dealDate},
+			#{passDate},
+			#{authorizeDate},
+			#{standardDuration},
+			#{actualDuration},
+			#{bidMoney},
+			#{contractMoney},
+			#{dimensionTime}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_contract_timeliness','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_contract_timeliness(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createByName} as "createByName",
+                    #{item.createDate} as "createDate",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.delFlag} as "delFlag",
+                    #{item.companyName} as "companyName",
+                    #{item.contractNumber} as "contractNumber",
+                    #{item.contractName} as "contractName",
+                    #{item.dealDate} as "dealDate",
+                    #{item.passDate} as "passDate",
+                    #{item.authorizeDate} as "authorizeDate",
+                    #{item.standardDuration} as "standardDuration",
+                    #{item.actualDuration} as "actualDuration",
+                    #{item.bidMoney} as "bidMoney",
+                    #{item.contractMoney} as "contractMoney",
+                    #{item.dimensionTime} as "dimensionTime"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_contract_timeliness SET
+			id = #{id},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			company_name = #{companyName},
+			contract_number = #{contractNumber},
+			contract_name = #{contractName},
+			deal_date = #{dealDate},
+			pass_date = #{passDate},
+			authorize_date = #{authorizeDate},
+			standard_duration = #{standardDuration},
+			actual_duration = #{actualDuration},
+			bid_money = #{bidMoney},
+			contract_money = #{contractMoney},
+			dimension_time = #{dimensionTime}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_contract_timeliness
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+</mapper>

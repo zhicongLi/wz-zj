@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzIndexValueDao">
+
+	<sql id="wzIndexValueColumns">
+		a.id AS "id",
+		a.index_code AS "indexCode",
+		a.org_id AS "orgId",
+		a.time AS "time",
+		a.d_value AS "dValue",
+		a.value1 AS "value1",
+		a.value2 AS "value2",
+		a.index_from AS "indexFrom",
+		a.ismodify AS "ismodify",
+		a.plan_value AS "planValue",
+		a.actual_value AS "actualValue",
+		a.extend_value AS "extendValue",
+		a.create_time AS "createTime",
+		a.update_time AS "updateTime",
+		a.remarks AS "remarks",
+		a.data_index_code AS "dataIndexCode",
+		a.org_name AS "orgName",
+		a.time_dimensionality AS "timeDimensionality"
+	</sql>
+
+	<sql id="wzIndexValueJoins">
+	</sql>
+    <sql id="whereStr">
+			1=1
+		    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzIndexValue">
+		SELECT
+			<include refid="wzIndexValueColumns"/>
+		FROM wz_index_value a
+		<include refid="wzIndexValueJoins"/>
+        WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzIndexValue">
+		SELECT
+			<include refid="wzIndexValueColumns"/>
+		FROM wz_index_value a
+		<include refid="wzIndexValueJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzIndexValue">
+		SELECT
+			<include refid="wzIndexValueColumns"/>
+		FROM wz_index_value a
+		<include refid="wzIndexValueJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        index_code,
+	        org_id,
+	        time,
+	        d_value,
+	        value1,
+	        value2,
+	        index_from,
+	        ismodify,
+	        plan_value,
+	        actual_value,
+	        extend_value,
+	        create_time,
+	        update_time,
+	        remarks,
+	        data_index_code,
+	        org_name,
+	        time_dimensionality
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_index_value','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_index_value(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{indexCode},
+			#{orgId},
+			#{time},
+			#{dValue},
+			#{value1},
+			#{value2},
+			#{indexFrom},
+			#{ismodify},
+			#{planValue},
+			#{actualValue},
+			#{extendValue},
+			#{createTime},
+			#{updateTime},
+			#{remarks},
+			#{dataIndexCode},
+			#{orgName},
+			#{timeDimensionality}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_index_value','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_index_value(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.indexCode} as "indexCode",
+                    #{item.orgId} as "orgId",
+                    #{item.time} as "time",
+                    #{item.dValue} as "dValue",
+                    #{item.value1} as "value1",
+                    #{item.value2} as "value2",
+                    #{item.indexFrom} as "indexFrom",
+                    #{item.ismodify} as "ismodify",
+                    #{item.planValue} as "planValue",
+                    #{item.actualValue} as "actualValue",
+                    #{item.extendValue} as "extendValue",
+                    #{item.createTime, jdbcType=TIMESTAMP} as "createTime",
+                    #{item.updateTime, jdbcType=TIMESTAMP} as "updateTime",
+                    #{item.remarks} as "remarks",
+                    #{item.dataIndexCode} as "dataIndexCode",
+                    #{item.orgName} as "orgName",
+                    #{item.timeDimensionality} as "timeDimensionality"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_index_value SET
+			id = #{id},
+			index_code = #{indexCode},
+			org_id = #{orgId},
+			time = #{time},
+			d_value = #{dValue},
+			value1 = #{value1},
+			value2 = #{value2},
+			index_from = #{indexFrom},
+			ismodify = #{ismodify},
+			plan_value = #{planValue},
+			actual_value = #{actualValue},
+			extend_value = #{extendValue},
+			create_time = #{createTime},
+			update_time = #{updateTime},
+			remarks = #{remarks},
+			data_index_code = #{dataIndexCode},
+			org_name = #{orgName},
+			time_dimensionality = #{timeDimensionality}
+        WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_index_value
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+    <select id="selectIndexValue" resultType="WzIndexValue">
+        select
+            <include refid="wzIndexValueColumns"/>
+        from wz_index_value a
+        where a.index_code = #{indexCode} and a.org_id = #{orgId}
+        and a.time_dimensionality = #{timeDimensionality}
+        <if test="time !=null and time !=''">
+            <bind name="time" value="time+'%'"/>
+            and time like #{time}
+        </if>
+    </select>
+
+    <select id="getSelectIndexValue" resultType="WzIndexValue">
+        select
+        <include refid="wzIndexValueColumns"/>
+        from wz_index_value a
+        where a.index_code in
+        <foreach collection="date" item="list" index="index" open="(" close=")" separator=",">
+            #{list}
+        </foreach>
+        <if test="orgId !=null and orgId !=''">
+            and a.org_id = #{orgId}
+        </if>
+        <if test="time !=null and time !=''">
+            <bind name="time" value="time+'%'"/>
+            and time like #{time}
+        </if>
+        <if test="timeDimensionality !=null and timeDimensionality !=''">
+            and time_dimensionality like #{timeDimensionality}
+        </if>
+
+    </select>
+
+    <select id="getSelectIndexValueForYear" resultType="WzIndexValue">
+        select
+        <include refid="wzIndexValueColumns"/>
+        from wz_index_value a
+        where a.index_code = #{indexCode} and a.d_value is not null
+        order by a.time desc
+    </select>
+
+</mapper>

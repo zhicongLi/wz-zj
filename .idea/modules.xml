@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ims-common/ims-common.iml" filepath="$PROJECT_DIR$/ims-common/ims-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ims-service/ims-demo/ims-demo.iml" filepath="$PROJECT_DIR$/ims-service/ims-demo/ims-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ims-gateway/ims-gateway.iml" filepath="$PROJECT_DIR$/ims-gateway/ims-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ims-service/ims-service.iml" filepath="$PROJECT_DIR$/ims-service/ims-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ims-service-api/ims-service-api.iml" filepath="$PROJECT_DIR$/ims-service-api/ims-service-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ims-template.iml" filepath="$PROJECT_DIR$/ims-template.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzPlanDao">
+
+	<sql id="wzPlanColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.examine_describe AS "examineDescribe",
+		a.dept AS "dept",
+		a.son_company AS "sonCompany",
+		a.project_describe AS "projectDescribe",
+		a.plate AS "plate",
+		a.jurisdiction AS "jurisdiction",
+		a.stage AS "stage",
+		a.classification AS "classification",
+		a.category AS "category",
+		a.budget AS "budget",
+		a.procurement_method AS "procurementMethod",
+		a.procurement_basis AS "procurementBasis",
+		a.supplier AS "supplier",
+		a.reason AS "reason",
+		a.money_resource AS "moneyResource",
+		a.job_content AS "jobContent",
+		a.workload AS "workload",
+		a.duration AS "duration",
+		a.people_situation AS "peopleSituation",
+		a.achievement AS "achievement",
+		a.review_method AS "reviewMethod",
+		a.detailed_list AS "detailedList",
+		a.specifications_file AS "specificationsFile",
+		a.remark AS "remark",
+		a.initiator AS "initiator",
+		a.bill_type AS "billType",
+		a.status AS "status",
+		a.create_by_name AS "createByName",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+        a.parent_id AS "parentId",
+        a.project_name AS "projectName",
+        a.other_cost AS "otherCost",
+        a.scoring AS "scoring",
+        a.whether_metting AS "whetherMetting",
+        a.metting_file AS "mettingFile",
+        a.payment_method AS "paymentMethod",
+        a.detailed_money AS "detailedMoney",
+        a.approval_dept AS "approvalDept",
+        a.approval_dept_name AS "approvalDeptName",
+        a.zygk_man AS "zygkMan",
+        a.zygk_time AS "zygkTime",
+        a.zygk_approval AS "zygkApproval",
+        a.xqdw_man AS "xqdwMan",
+        a.xqdw_time AS "xqdwTime",
+        a.xqdw_approval AS "xqdwApproval",
+        a.cgdl_man AS "cgdlMan",
+        a.cgdl_time AS "cgdlTime",
+        a.cgdl_approval AS "cgdlApproval",
+        a.jscg_man AS "jscgMan",
+        a.jscg_time AS "jscgTime",
+        a.jscg_approval AS "jscgApproval",
+        a.back_approval AS "backApproval",
+        a.plan_status AS "planStatus",
+        a.plan_time AS "planTime",
+        a.cgzc_man AS "cgzcMan",
+        a.cgzc_time AS "cgzcTime",
+        a.cgzc_approval AS "cgzcApproval",
+        a.isgenerate AS "isgenerate",
+        a.dept_code AS "deptCode",
+        a.taxrate AS "taxrate",
+        a.stop_reason AS "stopReason",
+        a.emergency_order AS "emergencyOrder",
+        a.system_basis AS "systemBasis",
+        a.price_formula AS "priceFormula",
+        a.rlwz_man AS "rlwzMan",
+        a.rlwz_time AS "rlwzTime",
+        a.rlwz_approval AS "rlwzApproval",
+        a.item_id AS "itemId",
+        a.other_taxrate AS "otherTaxrate",
+        a.scry_man AS "scryMan",
+        a.scry_time AS "scryTime",
+        a.scry_approval AS "scryApproval",
+        a.scry_name AS "scryName",
+        a.scry_id AS "scryId",
+        a.issc AS "issc",
+        a.result_id AS "resultId",
+        a.bmzr_name AS "bmzrName",
+        a.bmzr_id AS "bmzrId",
+        a.bmzr_man AS "bmzrMan",
+        a.bmzr_time AS "bmzrTime",
+        a.bmzr_approval AS "bmzrApproval",
+        a.plan_basis AS "planBasis",
+        a.plan_start_time AS "planStartTime",
+        a.contract_period AS "contractPeriod",
+        a.submit_month AS "submitMonth",
+        a.plan_number AS "planNumber",
+        a.bmfzr_id AS "bmfzrId",
+        a.bmfzr_name AS "bmfzrName",
+        a.bmfzr_man AS "bmfzrMan",
+        a.bmfzr_time AS "bmfzrTime",
+        a.bmfzr_approval AS "bmfzrApproval",
+        a.three_cost AS "threeCost"
+	</sql>
+
+	<sql id="wzPlanJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="parentId != null and parentId != ''">
+                AND a.parent_id = #{parentId}
+            </if>
+            <if test="resultId != null and resultId != ''">
+                AND a.result_id = #{resultId}
+            </if>
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzPlan">
+		SELECT
+			<include refid="wzPlanColumns"/>
+		FROM wz_plan a
+		<include refid="wzPlanJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzPlan">
+		SELECT
+			<include refid="wzPlanColumns"/>
+		FROM wz_plan a
+		<include refid="wzPlanJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+                order by status = '0' desc,status = 'csbh' desc,status='12' desc,status='10' desc,status='1' desc,status='11' desc, status='2' desc,status='3' desc,status='9' desc,status='4' desc,status='ysbh' desc, status='5' desc,status='6' desc,status='7' desc,status='8' desc,status='xmzz' desc,create_date desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzPlan">
+		SELECT
+			<include refid="wzPlanColumns"/>
+		FROM wz_plan a
+		<include refid="wzPlanJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+            </when>
+			<otherwise>
+                order by a.status,a.plan_time desc
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        code,
+	        examine_describe,
+	        dept,
+	        son_company,
+	        project_describe,
+	        plate,
+	        jurisdiction,
+	        stage,
+	        classification,
+	        category,
+	        budget,
+	        procurement_method,
+	        procurement_basis,
+	        supplier,
+	        reason,
+	        money_resource,
+	        job_content,
+	        workload,
+	        duration,
+	        people_situation,
+	        achievement,
+	        review_method,
+	        detailed_list,
+	        specifications_file,
+	        remark,
+	        initiator,
+	        bill_type,
+	        status,
+	        create_by_name,
+	        tenant_id,
+	        create_by,
+	        create_date,
+	        del_flag,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+            parent_id,
+            project_name,
+            other_cost,
+            scoring,
+            whether_metting,
+            metting_file,
+            payment_method,
+            detailed_money,
+            approval_dept,
+            approval_dept_name,
+            zygk_man,
+            zygk_time,
+            zygk_approval,
+            xqdw_man,
+            xqdw_time,
+            xqdw_approval,
+            cgdl_man,
+            cgdl_time,
+            cgdl_approval,
+            jscg_man,
+            jscg_time,
+            jscg_approval,
+            back_approval,
+            plan_status,
+            plan_time,
+            cgzc_man,
+            cgzc_time,
+            cgzc_approval,
+            isgenerate,
+            dept_code,
+            taxrate,
+            stop_reason,
+            emergency_order,
+            system_basis,
+            price_formula,
+            rlwz_man,
+            rlwz_time,
+            rlwz_approval,
+            item_id,
+            other_taxrate,
+            scry_man,
+            scry_time,
+            scry_approval,
+            scry_name,
+            scry_id,
+            issc,
+            result_id,
+            bmzr_name,
+            bmzr_id,
+            bmzr_man,
+            bmzr_time,
+            bmzr_approval,
+            plan_basis,
+            plan_start_time,
+            contract_period,
+            submit_month,
+            plan_number,
+            bmfzr_id,
+            bmfzr_name,
+            bmfzr_man,
+            bmfzr_time,
+            bmfzr_approval,
+            three_cost
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_plan','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_plan(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{code},
+			#{examineDescribe},
+			#{dept},
+			#{sonCompany},
+			#{projectDescribe},
+			#{plate},
+			#{jurisdiction},
+			#{stage},
+			#{classification},
+			#{category},
+			#{budget},
+			#{procurementMethod},
+			#{procurementBasis},
+			#{supplier},
+			#{reason},
+			#{moneyResource},
+			#{jobContent},
+			#{workload},
+			#{duration},
+			#{peopleSituation},
+			#{achievement},
+			#{reviewMethod},
+			#{detailedList},
+			#{specificationsFile},
+			#{remark},
+			#{initiator},
+			#{billType},
+			#{status},
+			#{createByName},
+			#{tenantId},
+			#{createBy},
+			#{createDate},
+			#{delFlag},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{parentId},
+		    #{projectName},
+		    #{otherCost},
+		    #{scoring},
+		    #{whetherMetting},
+		    #{mettingFile},
+		    #{paymentMethod},
+		    #{detailedMoney},
+		    #{approvalDept},
+		    #{approvalDeptName},
+		    #{zygkMan},
+		    #{zygkTime},
+		    #{zygkApproval},
+		    #{xqdwMan},
+		    #{xqdwTime},
+		    #{xqdwApproval},
+		    #{cgdlMan},
+		    #{cgdlTime},
+		    #{cgdlApproval},
+		    #{jscgMan},
+		    #{jscgTime},
+		    #{jscgApproval},
+		    #{backApproval},
+		    #{planStatus},
+		    #{planTime},
+		    #{cgzcMan},
+		    #{cgzcTime},
+		    #{cgzcApproval},
+		    #{isgenerate},
+		    #{deptCode},
+		    #{taxrate},
+		    #{stopReason},
+		    #{emergencyOrder},
+		    #{systemBasis},
+		    #{priceFormula},
+		    #{rlwzMan},
+		    #{rlwzTime},
+		    #{rlwzApproval},
+		    #{itemId},
+		    #{otherTaxrate},
+		    #{scryMan},
+		    #{scryTime},
+		    #{scryApproval},
+		    #{scryName},
+		    #{scryId},
+		    #{issc},
+		    #{resultId},
+		    #{bmzrName},
+		    #{bmzrId},
+		    #{bmzrMan},
+		    #{bmzrTime},
+		    #{bmzrApproval},
+		    #{planBasis},
+		    #{planStartTime},
+		    #{contractPeriod},
+		    #{submitMonth},
+		    #{planNumber},
+		    #{bmfzrId},
+		    #{bmfzrName},
+		    #{bmfzrMan},
+		    #{bmfzrTime},
+		    #{bmfzrApproval},
+		    #{threeCost}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_plan','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_plan(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.code} as "code",
+                    #{item.examineDescribe} as "examineDescribe",
+                    #{item.dept} as "dept",
+                    #{item.sonCompany} as "sonCompany",
+                    #{item.projectDescribe} as "projectDescribe",
+                    #{item.plate} as "plate",
+                    #{item.jurisdiction} as "jurisdiction",
+                    #{item.stage} as "stage",
+                    #{item.classification} as "classification",
+                    #{item.category} as "category",
+                    #{item.budget} as "budget",
+                    #{item.procurementMethod} as "procurementMethod",
+                    #{item.procurementBasis} as "procurementBasis",
+                    #{item.supplier} as "supplier",
+                    #{item.reason} as "reason",
+                    #{item.moneyResource} as "moneyResource",
+                    #{item.jobContent} as "jobContent",
+                    #{item.workload} as "workload",
+                    #{item.duration} as "duration",
+                    #{item.peopleSituation} as "peopleSituation",
+                    #{item.achievement} as "achievement",
+                    #{item.reviewMethod} as "reviewMethod",
+                    #{item.detailedList} as "detailedList",
+                    #{item.specificationsFile} as "specificationsFile",
+                    #{item.remark} as "remark",
+                    #{item.initiator} as "initiator",
+                    #{item.billType} as "billType",
+                    #{item.status} as "status",
+                    #{item.createByName} as "createByName",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createDate} as "createDate",
+                    #{item.delFlag} as "delFlag",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.parentId} as "parentId",
+                    #{item.projectName} as "projectName",
+                    #{item.otherCost} as "otherCost",
+                    #{item.scoring} as "scoring",
+                    #{item.whetherMetting} as "whetherMetting",
+                    #{item.mettingFile} as "mettingFile",
+                    #{item.paymentMethod} as "paymentMethod",
+                    #{item.detailedMoney} as "detailedMoney",
+                    #{item.approvalDept} as "approvalDept",
+                    #{item.approvalDeptName} as "approvalDeptName",
+                    #{item.zygkMan} as "zygkMan",
+                    #{item.zygkTime} as "zygkTime",
+                    #{item.zygkApproval} as "zygkApproval",
+                    #{item.xqdwMan} as "xqdwMan",
+                    #{item.xqdwTime} as "xqdwTime",
+                    #{item.xqdwApproval} as "xqdwApproval",
+                    #{item.cgdlMan} as "cgdlMan",
+                    #{item.cgdlTime} as "cgdlTime",
+                    #{item.cgdlApproval} as "cgdlApproval",
+                    #{item.jscgMan} as "jscgMan",
+                    #{item.jscgTime} as "jscgTime",
+                    #{item.jscgApproval} as "jscgApproval",
+                    #{item.backApproval} as "backApproval",
+                    #{item.planStatus} as "planStatus",
+                    #{item.planTime} as "planTime",
+                    #{item.cgzcMan} as "cgzcMan",
+                    #{item.cgzcTime} as "cgzcTime",
+                    #{item.cgzcApproval} as "cgzcApproval",
+                    #{item.isgenerate} as "isgenerate",
+                    #{item.deptCode} as "deptCode",
+                    #{item.taxrate} as "taxrate",
+                    #{item.stopReason} as "stopReason",
+                    #{item.emergencyOrder} as "emergencyOrder",
+                    #{item.systemBasis} as "systemBasis",
+                    #{item.priceFormula} as "priceFormula",
+                    #{item.rlwzMan} as "rlwzMan",
+                    #{item.rlwzTime} as "rlwzTime",
+                    #{item.rlwzApproval} as "rlwzApproval",
+                    #{item.itemId} as "itemId",
+                    #{item.otherTaxrate} as "otherTaxrate",
+                    #{item.scryMan} as "scryMan",
+                    #{item.scryTime} as "scryTime",
+                    #{item.scryApproval} as "scryApproval",
+                    #{item.scryName} as "scryName",
+                    #{item.scryId} as "scryId",
+                    #{item.issc} as "issc",
+                    #{item.resultId} as "resultId",
+                    #{item.bmzrName} as "bmzrName",
+                    #{item.bmzrId} as "bmzrId",
+                    #{item.bmzrMan} as "bmzrMan",
+                    #{item.bmzrTime} as "bmzrTime",
+                    #{item.bmzrApproval} as "bmzrApproval",
+                    #{item.planBasis} as "planBasis",
+                    #{item.planStartTime} as "planStartTime",
+                    #{item.contractPeriod} as "contractPeriod",
+                    #{item.submitMonth} as "submitMonth",
+                    #{item.planNumber} as "planNumber",
+                    #{item.bmfzrId} as "bmfzrId",
+                    #{item.bmfzrName} as "bmfzrName",
+                    #{item.bmfzrMan} as "bmfzrMan",
+                    #{item.bmfzrTime} as "bmfzrTime",
+                    #{item.bmfzrApproval} as "bmfzrApproval",
+                    #{item.threeCost} as "threeCost"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_plan SET
+			id = #{id},
+			code = #{code},
+			examine_describe = #{examineDescribe},
+			dept = #{dept},
+			son_company = #{sonCompany},
+			project_describe = #{projectDescribe},
+			plate = #{plate},
+			jurisdiction = #{jurisdiction},
+			stage = #{stage},
+			classification = #{classification},
+			category = #{category},
+			budget = #{budget},
+			procurement_method = #{procurementMethod},
+			procurement_basis = #{procurementBasis},
+			supplier = #{supplier},
+			reason = #{reason},
+			money_resource = #{moneyResource},
+			job_content = #{jobContent},
+			workload = #{workload},
+			duration = #{duration},
+			people_situation = #{peopleSituation},
+			achievement = #{achievement},
+			review_method = #{reviewMethod},
+			detailed_list = #{detailedList},
+			specifications_file = #{specificationsFile},
+			remark = #{remark},
+			initiator = #{initiator},
+			bill_type = #{billType},
+			status = #{status},
+			tenant_id = #{tenantId},
+		    parent_id = #{parentId},
+		    project_name = #{projectName},
+		    other_cost = #{otherCost},
+            scoring = #{scoring},
+		    whether_metting = #{whetherMetting},
+		    metting_file = #{mettingFile},
+		    payment_method = #{paymentMethod},
+		    detailed_money = #{detailedMoney},
+		    approval_dept = #{approvalDept},
+		    approval_dept_name = #{approvalDeptName},
+		    zygk_man = #{zygkMan},
+		    zygk_time = #{zygkTime},
+		    zygk_approval = #{zygkApproval},
+		    xqdw_man = #{xqdwMan},
+		    xqdw_time = #{xqdwTime},
+		    xqdw_approval = #{xqdwApproval},
+		    cgdl_man = #{cgdlMan},
+		    cgdl_time = #{cgdlTime},
+		    cgdl_approval = #{cgdlApproval},
+		    jscg_man = #{jscgMan},
+            jscg_time = #{jscgTime},
+            jscg_approval = #{jscgApproval},
+            back_approval = #{backApproval},
+		    plan_status = #{planStatus},
+		    plan_time = #{planTime},
+		    cgzc_man = #{cgzcMan},
+		    cgzc_time = #{cgzcTime},
+		    cgzc_approval = #{cgzcApproval},
+		    isgenerate = #{isgenerate},
+		    dept_code = #{deptCode},
+		    taxrate = #{taxrate},
+		    stop_reason = #{stopReason},
+		    emergency_order = #{emergencyOrder},
+		    system_basis = #{systemBasis},
+		    price_formula = #{priceFormula},
+		    rlwz_man = #{rlwzMan},
+		    rlwz_time = #{rlwzTime},
+		    rlwz_approval = #{rlwzApproval},
+		    item_id = #{itemId},
+		    other_taxrate = #{otherTaxrate},
+		    scry_man = #{scryMan},
+		    scry_time = #{scryTime},
+		    scry_approval = #{scryApproval},
+		    scry_name = #{scryName},
+		    scry_id = #{scryId},
+		    issc = #{issc},
+		    result_id = #{resultId},
+		    bmzr_name = #{bmzrName},
+		    bmzr_id = #{bmzrId},
+		    bmzr_man = #{bmzrMan},
+		    bmzr_time = #{bmzrTime},
+		    bmzr_approval = #{bmzrApproval},
+		    plan_basis = #{planBasis},
+		    plan_start_time = #{planStartTime},
+		    contract_period = #{contractPeriod},
+		    submit_month = #{submitMonth},
+		    plan_number = #{planNumber},
+		    bmfzr_id = #{bmfzrId},
+		    bmfzr_name = #{bmfzrName},
+		    bmfzr_man = #{bmfzrMan},
+		    bmfzr_time = #{bmfzrTime},
+		    bmfzr_approval = #{bmfzrApproval},
+		    three_cost = #{threeCost}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_plan
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+    <select id="getMaxCode" resultType="String">
+        select max(reverse(substr(reverse(code),1,3))) from wz_plan where 1=1
+        <if test="createDate !=null and createDate !=''">
+            <bind name="day" value="createDate+'%'"/>
+            and create_date like #{day}
+        </if>
+
+    </select>
+
+    <select id="queryList" resultType="WzPlan">
+        select * from wz_plan where parent_id = #{objId}
+    </select>
+
+
+    <select id="getSelectPlan" resultType="WzPlan">
+        select * from wz_plan where code = #{planNumber}
+    </select>
+
+    <update id="updateWzPlanResultId">
+        update wz_plan set result_id = '' where result_id = #{id}
+    </update>
+
+</mapper>

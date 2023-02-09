@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzJsFillInDao">
+
+	<sql id="wzJsFillInColumns">
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag",
+		a.dimension_time AS "dimensionTime",
+		a.krb AS "krb",
+		a.company AS "company",
+		a.cgcs AS "cgcs",
+		a.cgzb AS "cgzb"
+	</sql>
+
+	<sql id="wzJsFillInJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzJsFillIn">
+		SELECT
+			<include refid="wzJsFillInColumns"/>
+		FROM wz_js_fill_in a
+		<include refid="wzJsFillInJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzJsFillIn">
+		SELECT
+			<include refid="wzJsFillInColumns"/>
+		FROM wz_js_fill_in a
+		<include refid="wzJsFillInJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzJsFillIn">
+		SELECT
+			<include refid="wzJsFillInColumns"/>
+		FROM wz_js_fill_in a
+		<include refid="wzJsFillInJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        tenant_id,
+	        create_by,
+	        create_by_name,
+	        create_date,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        del_flag,
+	        dimension_time,
+	        krb,
+	        company,
+	        cgcs,
+	        cgzb
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_js_fill_in','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_js_fill_in(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{tenantId},
+			#{createBy},
+			#{createByName},
+			#{createDate},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{delFlag},
+			#{dimensionTime},
+			#{krb},
+			#{company},
+			#{cgcs},
+			#{cgzb}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_js_fill_in','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_js_fill_in(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createByName} as "createByName",
+                    #{item.createDate} as "createDate",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.delFlag} as "delFlag",
+                    #{item.dimensionTime, jdbcType=TIMESTAMP} as "dimensionTime",
+                    #{item.krb} as "krb",
+                    #{item.company} as "company",
+                    #{item.cgcs} as "cgcs",
+                    #{item.cgzb} as "cgzb"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_js_fill_in SET
+			id = #{id},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			dimension_time = #{dimensionTime},
+			krb = #{krb},
+			company = #{company},
+			cgcs = #{cgcs},
+			cgzb = #{cgzb}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_js_fill_in
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+</mapper>

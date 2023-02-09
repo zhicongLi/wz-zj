@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzTopicsMettingDao">
+
+	<sql id="wzTopicsMettingColumns">
+		a.id AS "id",
+		a.create_by_name AS "createByName",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.update_date AS "updateDate",
+		a.metting_code AS "mettingCode",
+		a.metting_name AS "mettingName",
+		a.metting_time AS "mettingTime",
+		a.metting_place AS "mettingPlace",
+		a.metting_people AS "mettingPeople",
+		a.metting_both AS "mettingBoth",
+		a.metting_status AS "mettingStatus",
+		a.metting_file AS "mettingFile",
+        a.status AS "status"
+	</sql>
+
+	<sql id="wzTopicsMettingJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzTopicsMetting">
+		SELECT
+			<include refid="wzTopicsMettingColumns"/>
+		FROM wz_topics_metting a
+		<include refid="wzTopicsMettingJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzTopicsMetting">
+		SELECT
+			<include refid="wzTopicsMettingColumns"/>
+		FROM wz_topics_metting a
+		<include refid="wzTopicsMettingJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzTopicsMetting">
+		SELECT
+			<include refid="wzTopicsMettingColumns"/>
+		FROM wz_topics_metting a
+		<include refid="wzTopicsMettingJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        create_by_name,
+	        tenant_id,
+	        create_by,
+	        create_date,
+	        del_flag,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        update_date,
+	        metting_code,
+	        metting_name,
+	        metting_time,
+	        metting_place,
+	        metting_people,
+	        metting_both,
+	        metting_status,
+	        metting_file,
+            status
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_topics_metting','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_topics_metting(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{createByName},
+			#{tenantId},
+			#{createBy},
+			#{createDate},
+			#{delFlag},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{updateDate},
+			#{mettingCode},
+			#{mettingName},
+			#{mettingTime},
+			#{mettingPlace},
+			#{mettingPeople},
+			#{mettingBoth},
+			#{mettingStatus},
+			#{mettingFile},
+		    #{status}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_topics_metting','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_topics_metting(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.createByName} as "createByName",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createDate} as "createDate",
+                    #{item.delFlag} as "delFlag",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.updateDate} as "updateDate",
+                    #{item.mettingCode} as "mettingCode",
+                    #{item.mettingName} as "mettingName",
+                    #{item.mettingTime} as "mettingTime",
+                    #{item.mettingPlace} as "mettingPlace",
+                    #{item.mettingPeople} as "mettingPeople",
+                    #{item.mettingBoth} as "mettingBoth",
+                    #{item.mettingStatus} as "mettingStatus",
+                    #{item.mettingFile} as "mettingFile",
+                    #{item.status} as "status"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_topics_metting SET
+			id = #{id},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			update_date = #{updateDate},
+			metting_code = #{mettingCode},
+			metting_name = #{mettingName},
+			metting_time = #{mettingTime},
+			metting_place = #{mettingPlace},
+			metting_people = #{mettingPeople},
+			metting_both = #{mettingBoth},
+			metting_status = #{mettingStatus},
+			metting_file = #{mettingFile},
+		    status = #{status}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_topics_metting
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+</mapper>

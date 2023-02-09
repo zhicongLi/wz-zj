@@ -1,0 +1,969 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzTopicsDao">
+
+	<sql id="wzTopicsColumns">
+		a.id AS "id",
+		a.create_by_name AS "createByName",
+        a.create_by AS "createBy",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.update_date AS "updateDate",
+		a.code AS "code",
+		a.bidding_name AS "biddingName",
+		a.topics_type AS "topicsType",
+		a.project_name AS "projectName",
+		a.bidder AS "bidder",
+		a.tender_price AS "tenderPrice",
+		a.evaluate_price AS "evaluatePrice",
+		a.price_number AS "priceNumber",
+		a.technology_number AS "technologyNumber",
+		a.business_number AS "businessNumber",
+		a.comprehensive_number AS "comprehensiveNumber",
+		a.comprehensive_sort AS "comprehensiveSort",
+		a.index_proposal AS "indexProposal",
+		a.write_by AS "writeBy",
+		a.write_name AS "writeName",
+		a.write_dept AS "writeDept",
+		a.status AS "status",
+		a.write_date AS "writeDate",
+		a.estimate AS "estimate",
+		a.range AS "range",
+		a.qualifications AS "qualifications",
+		a.quality_requirement AS "qualityRequirement",
+		a.duration AS "duration",
+		a.proportion AS "proportion",
+		a.avoid AS "avoid",
+		a.secrecy AS "secrecy",
+		a.objection AS "objection",
+		a.population AS "population",
+		a.company_name AS "companyName",
+		a.register_date AS "registerDate",
+		a.register_place AS "registerPlace",
+		a.company_achievement AS "companyAchievement",
+		a.other_achievement AS "otherAchievement",
+		a.problem_analysis AS "problemAnalysis",
+		a.score_judge AS "scoreJudge",
+		a.tenderee AS "tenderee",
+		a.diector AS "diector",
+		a.bid_supervisor AS "bidSupervisor",
+		a.types AS "types",
+		a.procurement_estimate AS "procurementEstimate",
+		a.supplier_name AS "supplierName",
+		a.supplier_price AS "supplierPrice",
+		a.substitute_name AS "substituteName",
+		a.substitute_price AS "substitutePrice",
+		a.remark AS "remark",
+		a.sketch AS "sketch",
+		a.disposal_suggestions AS "disposalSuggestions",
+		a.behavior_type AS "behaviorType",
+		a.basis AS "basis",
+		a.project_cgcode AS "projectCgcode",
+		a.project_cgname AS "projectCgname",
+		a.present_situation AS "presentSituation",
+		a.purchase_type AS "purchaseType",
+		a.end_date AS "endDate",
+		a.send_date AS "sendDate",
+		a.sign_date AS "signDate",
+		a.relieve_descr AS "relieveDescr",
+		a.clause AS "clause",
+		a.request_type AS "requestType",
+        a.metting_number AS "mettingNumber",
+        a.supplier_name1 AS "supplierName1",
+        a.supplier_name2 AS "supplierName2",
+        a.parent_id AS "parentId",
+        a.topics_status AS "topicsStatus",
+        a.supplier_file1 AS "supplierFile1",
+        a.supplier_file2 AS "supplierFile2",
+        a.son_company AS "sonCompany",
+        a.company_name1 AS "companyName1",
+        a.stage AS "stage",
+        a.category AS "category",
+        a.budget AS "budget",
+        a.mechanism AS "mechanism",
+        a.money_resource AS "moneyResource",
+        a.procurement_method AS "procurementMethod",
+        a.supplier AS "supplier",
+        a.job_content AS "jobContent",
+        a.workload AS "workload",
+        a.duration1 AS "duration1",
+        a.people_situation AS "peopleSituation",
+        a.achievement AS "achievement",
+        a.detailed_list AS "detailedList",
+        a.son_company1 AS "sonCompany1",
+        a.company_name2 AS "companyName2",
+        a.money_resource1 AS "moneyResource1",
+        a.ispass AS "ispass",
+        a.conclusion AS "conclusion",
+        a.pass_time AS "passTime",
+        a.first_achievement AS "firstAchievement",
+        a.isestimate AS "isestimate",
+        a.estimate_detailed AS "estimateDetailed",
+        a.isoffer AS "isoffer",
+        a.offer_detailed AS "offerDetailed",
+        a.topics_value AS "topicsValue",
+        a.topics_file AS "topicsFile",
+        a.metting_name AS "mettingName",
+        a.metting_time AS "mettingTime",
+        a.metting_summary AS "mettingSummary",
+        a.zbplan_id AS "zbplanId",
+        a.zbplan_name AS "zbplanName",
+        a.fzbplan_id AS "fzbplanId",
+        a.fzbplan_name AS "fzbplanName",
+        a.zbplan_sid AS "zbplanSid",
+        a.fzbplan_sid AS "fzbplanSid",
+        a.information_sources AS "informationSources",
+        a.contact_information AS "contactInformation",
+        a.mailbox AS "mailbox",
+        a.month AS "month",
+        a.application_type AS "applicationType",
+        a.project_category AS "projectCategory",
+        a.project_unit AS "projectUnit",
+        a.plate AS "plate",
+        a.budget_amount AS "budgetAmount",
+        a.document_number AS "documentNumber",
+        a.date_meeting AS "dateMeeting",
+        a.supplier_number AS "supplierNumber",
+        a.social_credit_code AS "socialCreditCode",
+        a.inform_supplierofdate AS "informSupplierofdate",
+        a.appeal AS "appeal",
+        a.appeal_handling AS "appealHandling",
+        a.disposal_start_date AS "disposalStartDate",
+        a.disposal_end_date AS "disposalEndDate",
+        a.remarks As "remarks",
+        a.budget_fzb AS "budgetFzb",
+        a.quoted_amount AS "quotedAmount",
+        a.project_describe AS "projectDescribe",
+        a.stage_fzb AS "stageFzb",
+        a.j_name AS "jName",
+        a.remark_zb AS "remarkZb",
+        a.price_ceiling AS "priceCeiling",
+        a.offer_number AS "offerNumber",
+        a.behavior_description AS "behaviorDescription",
+        a.achievementzb AS achievementzb,
+        a.project_describezb AS projectDescribezb,
+        a.stop_reason AS "stopReason",
+        a.procurement_basis_zb AS "procurementBasisZb",
+        a.procurement_basis_fzb AS "procurementBasisFzb",
+        a.parent_id1 AS "parentId1",
+        a.result_status AS "resultStatus",
+        a.metting_year AS "mettingYear",
+        a.period AS "period",
+        a.not_pass_reason AS "notPassReason"
+	</sql>
+
+	<sql id="wzTopicsJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="parentId != null and parentId != ''">
+                AND a.parent_id = #{parentId}
+            </if>
+            <if test="topicsType != null and topicsType != ''">
+                AND a.topics_type = #{topicsType}
+            </if>
+            <if test="zbplanSid != null and zbplanSid != ''">
+                AND a.zbplan_sid = ''
+            </if>
+            <if test="fzbplanSid != null and fzbplanSid != ''">
+                AND a.fzbplan_sid = ''
+            </if>
+            <if test="createCompany != null and createCompany != ''">
+                AND a.create_company = #{createCompany}
+            </if>
+            <if test="ispass != null and ispass != ''">
+                AND a.ispass = '0'
+            </if>
+            <if test="parentId1 != null and parentId1 != ''">
+                AND a.parent_id1 = #{parentId1}
+            </if>
+            <if test="resultStatus != null and resultStatus != ''">
+                AND a.result_status = #{resultStatus}
+            </if>
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+			<if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="topicsStatus != null and topicsStatus != ''">
+                AND topics_status = #{topicsStatus}
+            </if>
+    </sql>
+
+	<select id="get" resultType="WzTopics">
+		SELECT
+			<include refid="wzTopicsColumns"/>
+		FROM wz_topics a
+		<include refid="wzTopicsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzTopics">
+		SELECT
+			<include refid="wzTopicsColumns"/>
+		FROM wz_topics a
+		<include refid="wzTopicsJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+                ORDER BY a.topics_status = '0' DESC,a.topics_status = '3' DESC,a.topics_status = '1' DESC,a.topics_status = '2' DESC, a.write_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzTopics">
+		SELECT
+			<include refid="wzTopicsColumns"/>
+		FROM wz_topics a
+		<include refid="wzTopicsJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.write_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        create_by_name,
+            create_by,
+	        create_date,
+	        del_flag,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        update_date,
+	        code,
+	        bidding_name,
+	        topics_type,
+	        project_name,
+	        bidder,
+	        tender_price,
+	        evaluate_price,
+	        price_number,
+	        technology_number,
+	        business_number,
+	        comprehensive_number,
+	        comprehensive_sort,
+	        index_proposal,
+	        write_by,
+	        write_name,
+	        write_dept,
+	        status,
+	        write_date,
+	        estimate,
+	        range,
+	        qualifications,
+	        quality_requirement,
+	        duration,
+	        proportion,
+	        avoid,
+	        secrecy,
+	        objection,
+	        population,
+	        company_name,
+	        register_date,
+	        register_place,
+	        company_achievement,
+	        other_achievement,
+	        problem_analysis,
+	        score_judge,
+	        tenderee,
+	        diector,
+	        bid_supervisor,
+	        types,
+	        procurement_estimate,
+	        supplier_name,
+	        supplier_price,
+	        substitute_name,
+	        substitute_price,
+	        remark,
+	        sketch,
+	        disposal_suggestions,
+	        behavior_type,
+	        basis,
+	        project_cgcode,
+	        project_cgname,
+	        present_situation,
+	        purchase_type,
+	        end_date,
+	        send_date,
+	        sign_date,
+	        relieve_descr,
+	        clause,
+	        request_type,
+            metting_number,
+            supplier_name1,
+            supplier_name2,
+            parent_id,
+            topics_status,
+            supplier_file1,
+            supplier_file2,
+            son_company,
+            company_name1,
+            stage,
+            category,
+            budget,
+            mechanism,
+            money_resource,
+            procurement_method,
+            supplier,
+            job_content,
+            workload,
+            duration1,
+            people_situation,
+            achievement,
+            detailed_list,
+            son_company1,
+            company_name2,
+            money_resource1,
+            ispass,
+            conclusion,
+            pass_time,
+            first_achievement,
+            isestimate,
+            estimate_detailed,
+            isoffer,
+            offer_detailed,
+            topics_value,
+            topics_file,
+            metting_name,
+            metting_time,
+            metting_summary,
+            zbplan_id,
+            zbplan_name,
+            fzbplan_id,
+            fzbplan_name,
+            zbplan_sid,
+            fzbplan_sid,
+            information_sources,
+            contact_information,
+            mailbox,
+            month,
+            application_type,
+            project_category,
+            project_unit,
+            plate,
+            budget_amount,
+            document_number,
+            date_meeting,
+            supplier_number,
+            social_credit_code,
+            inform_supplierofdate,
+            appeal,
+            appeal_handling,
+            disposal_start_date,
+            disposal_end_date,
+            remarks,
+            budget_fzb,
+            quoted_amount,
+            project_describe,
+            stage_fzb,
+            j_name,
+            remark_zb,
+            price_ceiling,
+            offer_number,
+            behavior_description,
+            achievementzb,
+            project_describezb,
+            stop_reason,
+            procurement_basis_zb,
+            procurement_basis_fzb,
+            parent_id1,
+            result_status,
+            metting_year,
+            period,
+            not_pass_reason
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_topics','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_topics(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{createByName},
+            #{createBy},
+			#{createDate},
+			#{delFlag},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{updateDate},
+			#{code},
+			#{biddingName},
+			#{topicsType},
+			#{projectName},
+			#{bidder},
+			#{tenderPrice},
+			#{evaluatePrice},
+			#{priceNumber},
+			#{technologyNumber},
+			#{businessNumber},
+			#{comprehensiveNumber},
+			#{comprehensiveSort},
+			#{indexProposal},
+            #{writeBy},
+			#{writeName},
+			#{writeDept},
+			#{status},
+			#{writeDate},
+			#{estimate},
+			#{range},
+			#{qualifications},
+			#{qualityRequirement},
+			#{duration},
+			#{proportion},
+			#{avoid},
+			#{secrecy},
+			#{objection},
+			#{population},
+			#{companyName},
+			#{registerDate},
+			#{registerPlace},
+			#{companyAchievement},
+			#{otherAchievement},
+			#{problemAnalysis},
+			#{scoreJudge},
+			#{tenderee},
+			#{diector},
+			#{bidSupervisor},
+			#{types},
+			#{procurementEstimate},
+			#{supplierName},
+			#{supplierPrice},
+			#{substituteName},
+			#{substitutePrice},
+			#{remark},
+			#{sketch},
+			#{disposalSuggestions},
+			#{behaviorType},
+			#{basis},
+			#{projectCgcode},
+			#{projectCgname},
+			#{presentSituation},
+			#{purchaseType},
+			#{endDate},
+			#{sendDate},
+			#{signDate},
+			#{relieveDescr},
+			#{clause},
+			#{requestType},
+		    #{mettingNumber},
+		    #{supplierName1},
+		    #{supplierName2},
+		    #{parentId},
+		    #{topicsStatus},
+		    #{supplierFile1},
+		    #{supplierFile2},
+		    #{sonCompany},
+		    #{companyName1},
+		    #{stage},
+		    #{category},
+		    #{budget},
+		    #{mechanism},
+		    #{moneyResource},
+		    #{procurementMethod},
+		    #{supplier},
+		    #{jobContent},
+		    #{workload},
+		    #{duration1},
+		    #{peopleSituation},
+		    #{achievement},
+            #{detailedList},
+		    #{sonCompany1},
+		    #{companyName2},
+		    #{moneyResource1},
+		    #{ispass},
+		    #{conclusion},
+		    #{passTime},
+		    #{firstAchievement},
+		    #{isestimate},
+		    #{estimateDetailed},
+		    #{isoffer},
+		    #{offerDetailed},
+		    #{topicsValue},
+		    #{topicsFile},
+		    #{mettingName},
+		    #{mettingTime},
+		    #{mettingSummary},
+		    #{zbplanId},
+		    #{zbplanName},
+		    #{fzbplanId},
+		    #{fzbplanName},
+		    #{zbplanSid},
+		    #{fzbplanSid},
+            #{informationSources},
+            #{contactInformation},
+            #{mailbox},
+            #{month},
+            #{applicationType},
+            #{projectCategory},
+            #{projectUnit},
+            #{plate},
+            #{budgetAmount},
+            #{documentNumber},
+            #{dateMeeting},
+            #{supplierNumber},
+            #{socialCreditCode},
+            #{informSupplierofdate},
+            #{appeal},
+            #{appealHandling},
+            #{disposalStartDate},
+            #{disposalEndDate},
+            #{remarks},
+            #{budgetFzb},
+            #{quotedAmount},
+            #{projectDescribe},
+            #{stageFzb},
+            #{jName},
+            #{remarkZb},
+            #{priceCeiling},
+            #{offerNumber},
+            #{behaviorDescription},
+            #{achievementzb},
+            #{projectDescribezb},
+            #{stopReason},
+            #{procurementBasisZb},
+            #{procurementBasisFzb},
+            #{parentId1},
+            #{resultStatus},
+            #{mettingYear},
+            #{period},
+            #{notPassReason}
+        )
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_topics','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_topics(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.createByName} as "createByName",
+                    #{item.createBy} as "createBy",
+                    #{item.createDate} as "createDate",
+                    #{item.delFlag} as "delFlag",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.updateDate} as "updateDate",
+                    #{item.code} as "code",
+                    #{item.biddingName} as "biddingName",
+                    #{item.topicsType} as "topicsType",
+                    #{item.projectName} as "projectName",
+                    #{item.bidder} as "bidder",
+                    #{item.tenderPrice} as "tenderPrice",
+                    #{item.evaluatePrice} as "evaluatePrice",
+                    #{item.priceNumber} as "priceNumber",
+                    #{item.technologyNumber} as "technologyNumber",
+                    #{item.businessNumber} as "businessNumber",
+                    #{item.comprehensiveNumber} as "comprehensiveNumber",
+                    #{item.comprehensiveSort} as "comprehensiveSort",
+                    #{item.indexProposal} as "indexProposal",
+                    #{item.writeBy} as "writeBy",
+                    #{item.writeName} as "writeName",
+                    #{item.writeDept} as "writeDept",
+                    #{item.status} as "status",
+                    #{item.writeDate} as "writeDate",
+                    #{item.estimate} as "estimate",
+                    #{item.range} as "range",
+                    #{item.qualifications} as "qualifications",
+                    #{item.qualityRequirement} as "qualityRequirement",
+                    #{item.duration} as "duration",
+                    #{item.proportion} as "proportion",
+                    #{item.avoid} as "avoid",
+                    #{item.secrecy} as "secrecy",
+                    #{item.objection} as "objection",
+                    #{item.population} as "population",
+                    #{item.companyName} as "companyName",
+                    #{item.registerDate} as "registerDate",
+                    #{item.registerPlace} as "registerPlace",
+                    #{item.companyAchievement} as "companyAchievement",
+                    #{item.otherAchievement} as "otherAchievement",
+                    #{item.problemAnalysis} as "problemAnalysis",
+                    #{item.scoreJudge} as "scoreJudge",
+                    #{item.tenderee} as "tenderee",
+                    #{item.diector} as "diector",
+                    #{item.bidSupervisor} as "bidSupervisor",
+                    #{item.types} as "types",
+                    #{item.procurementEstimate} as "procurementEstimate",
+                    #{item.supplierName} as "supplierName",
+                    #{item.supplierPrice} as "supplierPrice",
+                    #{item.substituteName} as "substituteName",
+                    #{item.substitutePrice} as "substitutePrice",
+                    #{item.remark} as "remark",
+                    #{item.sketch} as "sketch",
+                    #{item.disposalSuggestions} as "disposalSuggestions",
+                    #{item.behaviorType} as "behaviorType",
+                    #{item.basis} as "basis",
+                    #{item.projectCgcode} as "projectCgcode",
+                    #{item.projectCgname} as "projectCgname",
+                    #{item.presentSituation} as "presentSituation",
+                    #{item.purchaseType} as "purchaseType",
+                    #{item.endDate} as "endDate",
+                    #{item.sendDate} as "sendDate",
+                    #{item.signDate, jdbcType=TIMESTAMP} as "signDate",
+                    #{item.relieveDescr} as "relieveDescr",
+                    #{item.clause} as "clause",
+                    #{item.requestType} as "requestType",
+                    #{item.mettingNumber} as "mettingNumber",
+                    #{item.supplierName1} as "supplierName1",
+                    #{item.supplierName2} as "supplierName2",
+                    #{item.parentId} as "parentId",
+                    #{item.topicsStatus} as "topicsStatus",
+                    #{item.supplierFile1} as "supplierFile1",
+                    #{item.supplierFile2} as "supplierFile2",
+                    #{item.sonCompany} as "sonCompany",
+                    #{item.companyName1} as "companyName1",
+                    #{item.stage} as "stage",
+                    #{item.category} as "category",
+                    #{item.budget} as "budget",
+                    #{item.mechanism} as "mechanism",
+                    #{item.moneyResource} as "moneyResource",
+                    #{item.procurementMethod} as "procurementMethod",
+                    #{item.supplier} as "supplier",
+                    #{item.jobContent} as "jobContent",
+                    #{item.workload} as "workload",
+                    #{item.duration1} as "duration1",
+                    #{item.peopleSituation} as "peopleSituation",
+                    #{item.achievement} as "achievement",
+                    #{item.detailedList} as "detailedList"
+                    #{item.sonCompany1} as "sonCompany1",
+                    #{item.companyName2} as "companyName2",
+                    #{item.moneyResource1} as "moneyResource1",
+                    #{item.ispass} as "ispass",
+                    #{item.conclusion} as "conclusion",
+                    #{item.passTime} as "passTime",
+                    #{item.firstAchievement} as "firstAchievement",
+                    #{item.isestimate} as "isestimate",
+                    #{item.estimateDetailed} as "estimateDetailed",
+                    #{item.isoffer} as "isoffer",
+                    #{item.offerDetailed} as "offerDetailed",
+                    #{item.topicsValue} as "topicsValue",
+                    #{item.topicsFile} as "topicsFile",
+                    #{item.mettingName} as "mettingName",
+                    #{item.mettingTime} as "mettingTime",
+                    #{item.mettingSummary} as "mettingSummary",
+                    #{item.zbplanId} as "zbplanId",
+                    #{item.zbplanName} as "zbplanName",
+                    #{item.fzbplanId} as "fzbplanId",
+                    #{item.fzbplanName} as "fzbplanName",
+                    #{item.zbplanSid} as "zbplanSid",
+                    #{item.fzbplanSid} as "fzbplanSid",
+                    #{item.informationSources} as "informationSources",
+                    #{item.contactInformation} as "contactInformation",
+                    #{item.mailbox} as "mailbox",
+                    #{item.month} as "month",
+                    #{item.applicationType} as "applicationType",
+                    #{item.projectCategory} as "projectCategory",
+                    #{item.projectUnit} as "projectUnit",
+                    #{item.plate} as "plate",
+                    #{item.budgetAmount} as "budgetAmount",
+                    #{item.documentNumber} as "documentNumber",
+                    #{item.dateMeeting} as "dateMeeting",
+                    #{item.supplierNumber} as "supplierNumber",
+                    #{item.socialCreditCode} as "socialCreditCode",
+                    #{item.informSupplierofdate} as "informSupplierofdate",
+                    #{item.appeal} as "appeal",
+                    #{item.appealHandling} as "appealHandling",
+                    #{item.disposalStartDate} as "disposalStartDate",
+                    #{item.disposalenddate} as "disposalEndDate",
+                    #{item.remarks} as "remarks",
+                    #{item.budgetFzb} AS "budgetFzb",
+                    #{item.quotedAmount} AS "quotedAmount",
+                    #{item.projectDescribe} AS "projectDescribe",
+                    #{item.stageFzb} AS "stageFzb",
+                    #{item.jName} AS "jName",
+                    #{item.remarkZb} AS "remarkZb",
+                    #{item.priceCeiling} AS "priceCeiling",
+                    #{item.offerNumber} AS "offerNumber",
+                    #{item.behaviorDescription} AS "behaviorDescription",
+                    #{item.achievementzb} AS "achievementzb",
+                    #{item.projectDescribezb} AS "projectDescribezb",
+                    #{item.stopReason} AS "stopReason",
+                    #{item.procurementBasisZb} AS "procurementBasisZb",
+                    #{item.procurementBasisFzb} AS "procurementBasisFzb",
+                    #{item.parentId1} AS "parentId1",
+                    #{item.resultStatus} AS "resultStatus",
+                    #{item.mettingYear} AS "mettingYear",
+                    #{item.period} AS "period",
+                    #{item.notPassReason} AS "notPassReason"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_topics SET
+			id = #{id},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			update_date = #{updateDate},
+			code = #{code},
+			bidding_name = #{biddingName},
+			topics_type = #{topicsType},
+			project_name = #{projectName},
+			bidder = #{bidder},
+			tender_price = #{tenderPrice},
+			evaluate_price = #{evaluatePrice},
+			price_number = #{priceNumber},
+			technology_number = #{technologyNumber},
+			business_number = #{businessNumber},
+			comprehensive_number = #{comprehensiveNumber},
+			comprehensive_sort = #{comprehensiveSort},
+			index_proposal = #{indexProposal},
+			write_by = #{writeBy},
+			write_name = #{writeName},
+			write_dept = #{writeDept},
+			status = #{status},
+			write_date = #{writeDate},
+			estimate = #{estimate},
+			range = #{range},
+			qualifications = #{qualifications},
+			quality_requirement = #{qualityRequirement},
+			duration = #{duration},
+			proportion = #{proportion},
+			avoid = #{avoid},
+			secrecy = #{secrecy},
+			objection = #{objection},
+			population = #{population},
+			company_name = #{companyName},
+			register_date = #{registerDate},
+			register_place = #{registerPlace},
+			company_achievement = #{companyAchievement},
+			other_achievement = #{otherAchievement},
+			problem_analysis = #{problemAnalysis},
+			score_judge = #{scoreJudge},
+			tenderee = #{tenderee},
+			diector = #{diector},
+			bid_supervisor = #{bidSupervisor},
+			types = #{types},
+			procurement_estimate = #{procurementEstimate},
+			supplier_name = #{supplierName},
+			supplier_price = #{supplierPrice},
+			substitute_name = #{substituteName},
+			substitute_price = #{substitutePrice},
+			remark = #{remark},
+			sketch = #{sketch},
+			disposal_suggestions = #{disposalSuggestions},
+			behavior_type = #{behaviorType},
+			basis = #{basis},
+			project_cgcode = #{projectCgcode},
+			project_cgname = #{projectCgname},
+			present_situation = #{presentSituation},
+			purchase_type = #{purchaseType},
+			end_date = #{endDate},
+			send_date = #{sendDate},
+			sign_date = #{signDate},
+			relieve_descr = #{relieveDescr},
+			clause = #{clause},
+			request_type = #{requestType},
+		    metting_number = #{mettingNumber},
+            supplier_name1 = #{supplierName1},
+		    supplier_name2 = #{supplierName2},
+		    parent_id = #{parentId},
+		    topics_status = #{topicsStatus},
+		    supplier_file1 = #{supplierFile1},
+		    supplier_file2 = #{supplierFile2},
+		    son_company = #{sonCompany},
+		    company_name1 = #{companyName1},
+            stage = #{stage},
+            category = #{category},
+            budget = #{budget},
+            mechanism = #{mechanism},
+            money_resource = #{moneyResource},
+            procurement_method = #{procurementMethod},
+            supplier = #{supplier},
+            job_content = #{jobContent},
+            workload = #{workload},
+            duration1 = #{duration1},
+            people_situation = #{peopleSituation},
+            achievement = #{achievement},
+            detailed_list = #{detailedList},
+		    son_company1 = #{sonCompany1},
+		    company_name2 = #{companyName2},
+		    money_resource1 = #{moneyResource1},
+		    ispass = #{ispass},
+		    conclusion = #{conclusion},
+		    pass_time = #{passTime},
+		    first_achievement = #{firstAchievement},
+            isestimate = #{isestimate},
+		    estimate_detailed = #{estimateDetailed},
+		    isoffer = #{isoffer},
+		    offer_detailed = #{offerDetailed},
+		    topics_value = #{topicsValue},
+		    topics_file = #{topicsFile},
+		    metting_name = #{mettingName},
+		    metting_time = #{mettingTime},
+		    metting_summary = #{mettingSummary},
+		    zbplan_id = #{zbplanId},
+		    zbplan_name = #{zbplanName},
+		    fzbplan_id = #{fzbplanId},
+		    fzbplan_name = #{fzbplanName},
+		    zbplan_sid = #{zbplanSid},
+		    fzbplan_sid = #{fzbplanSid},
+		    information_sources = #{informationSources},
+            contact_information = #{contactInformation},
+            mailbox = #{mailbox},
+            month = #{month},
+            application_type = #{applicationType},
+            project_category = #{projectCategory},
+            project_unit = #{projectUnit},
+            plate = #{plate},
+            budget_amount = #{budgetAmount},
+            document_number = #{documentNumber},
+            date_meeting = #{dateMeeting},
+            supplier_number = #{supplierNumber},
+            social_credit_code = #{socialCreditCode},
+            inform_supplierofdate = #{informSupplierofdate},
+            appeal = #{appeal},
+            appeal_handling = #{appealHandling},
+            disposal_start_date = #{disposalStartDate},
+            disposal_end_date = #{disposalEndDate},
+            remarks = #{remarks},
+            budget_fzb = #{budgetFzb},
+            quoted_amount = #{quotedAmount},
+            project_describe = #{projectDescribe},
+            stage_fzb = #{stageFzb},
+            j_name = #{jName},
+            remark_zb = #{remarkZb},
+            price_ceiling = #{priceCeiling},
+            offer_number = #{offerNumber},
+            behavior_description = #{behaviorDescription},
+            achievementzb = #{achievementzb},
+            project_describezb = #{projectDescribezb},
+            stop_reason = #{stopReason},
+            procurement_basis_zb = #{procurementBasisZb},
+            procurement_basis_fzb = #{procurementBasisFzb},
+            parent_id1 = #{parentId1},
+            result_status = #{resultStatus},
+            metting_year = #{mettingYear},
+            period = #{period},
+            not_pass_reason = #{notPassReason}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_topics
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+    <select id="getMaxCode" resultType="String">
+        select max(reverse(substr(reverse(code),1,3))) from wz_topics where 1=1
+        <if test="createDate !=null and createDate !=''">
+            <bind name="day" value="createDate+'%'"/>
+            and create_date like #{day}
+        </if>
+    </select>
+
+    <select id="queryWzTopicsList" resultType="WzTopics">
+        SELECT
+        <include refid="wzTopicsColumns"/>
+        FROM wz_topics a where a.parent_id = #{id}
+    </select>
+
+    <select id="getWzTopics" resultType="WzTopics">
+        select * from wz_topics where fzbplan_sid = #{id}
+    </select>
+
+    <select id="getWzTopics1" resultType="WzTopics">
+        select * from wz_topics where zbplan_sid = #{id}
+    </select>
+
+    <select id="findListOfMeet" resultType="WzTopics">
+        SELECT
+        <include refid="wzTopicsColumns"/>
+        FROM wz_topics a
+        <where>
+            <include refid="whereStr"/>
+        </where>
+        <if test="sqlMap.orderBy != null and  sqlMap.orderBy  != ''">
+            ORDER BY ${sqlMap.orderBy}
+        </if>
+<!--        <choose>-->
+<!--            <when test="page.orderBy != null and page.orderBy != ''">-->
+<!--                ORDER BY ${page.orderBy}-->
+<!--            </when>-->
+<!--            <otherwise>-->
+<!--                ORDER BY a.write_date DESC-->
+<!--            </otherwise>-->
+<!--        </choose>-->
+    </select>
+</mapper>

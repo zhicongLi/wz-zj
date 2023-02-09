@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzProcurementDao">
+
+	<sql id="wzProcurementColumns">
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag",
+		a.company_name AS "companyName",
+		a.project_type AS "projectType",
+		a.procurement_method AS "procurementMethod",
+		a.package_code AS "packageCode",
+		a.contract_name AS "contractName",
+		a.supplier AS "supplier",
+		a.deal_date AS "dealDate",
+		a.pass_date AS "passDate",
+		a.quantity AS "quantity",
+		a.unit_price AS "unitPrice",
+		a.plan_money AS "planMoney",
+		a.bidding_money AS "biddingMoney",
+		a.plan_count_number AS "planCountNumber",
+		a.contract_unit_price AS "contractUnitPrice",
+		a.contract_count_price AS "contractCountPrice",
+		a.receiving_number AS "receivingNumber",
+		a.receiving_price AS "receivingPrice",
+		a.invoice_number AS "invoiceNumber",
+		a.invoice_money AS "invoiceMoney",
+		a.plan_project_number AS "planProjectNumber",
+		a.sale_contract_money AS "saleContractMoney",
+		a.sale_contract_number AS "saleContractNumber",
+		a.sale_contract_unit_price AS "saleContractUnitPrice",
+		a.two_contract_count_price AS "twoContractCountPrice",
+		a.two_sale_contract_unit_price AS "twoSaleContractUnitPrice",
+		a.delivery_number AS "deliveryNumber",
+		a.no_delivery_number AS "noDeliveryNumber",
+		a.invoicing_number AS "invoicingNumber",
+		a.company_code AS "companyCode",
+		a.supplier_code AS "supplierCode",
+		a.supplier_name AS "supplierName",
+		a.dimension_time AS "dimensionTime"
+	</sql>
+
+	<sql id="wzProcurementJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzProcurement">
+		SELECT
+			<include refid="wzProcurementColumns"/>
+		FROM wz_procurement a
+		<include refid="wzProcurementJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzProcurement">
+		SELECT
+			<include refid="wzProcurementColumns"/>
+		FROM wz_procurement a
+		<include refid="wzProcurementJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzProcurement">
+		SELECT
+			<include refid="wzProcurementColumns"/>
+		FROM wz_procurement a
+		<include refid="wzProcurementJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        tenant_id,
+	        create_by,
+	        create_by_name,
+	        create_date,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        del_flag,
+	        company_name,
+	        project_type,
+	        procurement_method,
+	        package_code,
+	        contract_name,
+	        supplier,
+	        deal_date,
+	        pass_date,
+	        quantity,
+	        unit_price,
+	        plan_money,
+	        bidding_money,
+	        plan_count_number,
+	        contract_unit_price,
+	        contract_count_price,
+	        receiving_number,
+	        receiving_price,
+	        invoice_number,
+	        invoice_money,
+	        plan_project_number,
+	        sale_contract_money,
+	        sale_contract_number,
+	        sale_contract_unit_price,
+	        two_contract_count_price,
+	        two_sale_contract_unit_price,
+	        delivery_number,
+	        no_delivery_number,
+	        invoicing_number,
+	        company_code,
+	        supplier_code,
+	        supplier_name,
+	        dimension_time
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_procurement','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_procurement(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{tenantId},
+			#{createBy},
+			#{createByName},
+			#{createDate},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{delFlag},
+			#{companyName},
+			#{projectType},
+			#{procurementMethod},
+			#{packageCode},
+			#{contractName},
+			#{supplier},
+			#{dealDate},
+			#{passDate},
+			#{quantity},
+			#{unitPrice},
+			#{planMoney},
+			#{biddingMoney},
+			#{planCountNumber},
+			#{contractUnitPrice},
+			#{contractCountPrice},
+			#{receivingNumber},
+			#{receivingPrice},
+			#{invoiceNumber},
+			#{invoiceMoney},
+			#{planProjectNumber},
+			#{saleContractMoney},
+			#{saleContractNumber},
+			#{saleContractUnitPrice},
+			#{twoContractCountPrice},
+			#{twoSaleContractUnitPrice},
+			#{deliveryNumber},
+			#{noDeliveryNumber},
+			#{invoicingNumber},
+			#{companyCode},
+			#{supplierCode},
+			#{supplierName},
+			#{dimensionTime}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_procurement','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_procurement(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createByName} as "createByName",
+                    #{item.createDate} as "createDate",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.delFlag} as "delFlag",
+                    #{item.companyName} as "companyName",
+                    #{item.projectType} as "projectType",
+                    #{item.procurementMethod} as "procurementMethod",
+                    #{item.packageCode} as "packageCode",
+                    #{item.contractName} as "contractName",
+                    #{item.supplier} as "supplier",
+                    #{item.dealDate} as "dealDate",
+                    #{item.passDate} as "passDate",
+                    #{item.quantity} as "quantity",
+                    #{item.unitPrice} as "unitPrice",
+                    #{item.planMoney} as "planMoney",
+                    #{item.biddingMoney} as "biddingMoney",
+                    #{item.planCountNumber} as "planCountNumber",
+                    #{item.contractUnitPrice} as "contractUnitPrice",
+                    #{item.contractCountPrice} as "contractCountPrice",
+                    #{item.receivingNumber} as "receivingNumber",
+                    #{item.receivingPrice} as "receivingPrice",
+                    #{item.invoiceNumber} as "invoiceNumber",
+                    #{item.invoiceMoney} as "invoiceMoney",
+                    #{item.planProjectNumber} as "planProjectNumber",
+                    #{item.saleContractMoney} as "saleContractMoney",
+                    #{item.saleContractNumber} as "saleContractNumber",
+                    #{item.saleContractUnitPrice} as "saleContractUnitPrice",
+                    #{item.twoContractCountPrice} as "twoContractCountPrice",
+                    #{item.twoSaleContractUnitPrice} as "twoSaleContractUnitPrice",
+                    #{item.deliveryNumber} as "deliveryNumber",
+                    #{item.noDeliveryNumber} as "noDeliveryNumber",
+                    #{item.invoicingNumber} as "invoicingNumber",
+                    #{item.companyCode} as "companyCode",
+                    #{item.supplierCode} as "supplierCode",
+                    #{item.supplierName} as "supplierName",
+                    #{item.dimensionTime} as "dimensionTime"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_procurement SET
+			id = #{id},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			company_name = #{companyName},
+			project_type = #{projectType},
+			procurement_method = #{procurementMethod},
+			package_code = #{packageCode},
+			contract_name = #{contractName},
+			supplier = #{supplier},
+			deal_date = #{dealDate},
+			pass_date = #{passDate},
+			quantity = #{quantity},
+			unit_price = #{unitPrice},
+			plan_money = #{planMoney},
+			bidding_money = #{biddingMoney},
+			plan_count_number = #{planCountNumber},
+			contract_unit_price = #{contractUnitPrice},
+			contract_count_price = #{contractCountPrice},
+			receiving_number = #{receivingNumber},
+			receiving_price = #{receivingPrice},
+			invoice_number = #{invoiceNumber},
+			invoice_money = #{invoiceMoney},
+			plan_project_number = #{planProjectNumber},
+			sale_contract_money = #{saleContractMoney},
+			sale_contract_number = #{saleContractNumber},
+			sale_contract_unit_price = #{saleContractUnitPrice},
+			two_contract_count_price = #{twoContractCountPrice},
+			two_sale_contract_unit_price = #{twoSaleContractUnitPrice},
+			delivery_number = #{deliveryNumber},
+			no_delivery_number = #{noDeliveryNumber},
+			invoicing_number = #{invoicingNumber},
+			company_code = #{companyCode},
+			supplier_code = #{supplierCode},
+			supplier_name = #{supplierName},
+			dimension_time = #{dimensionTime}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_procurement
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+    <select id="getSelectIndexValue" resultType="WzProcurement">
+        select
+        <include refid="wzProcurementColumns"/>
+        FROM wz_procurement a
+        where 1 = 1
+        <if test="time !=null and time !=''">
+            <bind name="time" value="time+'%'"/>
+            and a.dimensionTime like #{time}
+        </if>
+    </select>
+
+    <select id="getSelectDate" resultType="WzProcurement">
+        select
+        a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag",
+		a.company_name AS "companyName",
+		a.project_type AS "projectType",
+		a.procurement_method AS "procurementMethod",
+		a.package_code AS "packageCode",
+		a.contract_name AS "contractName",
+		a.supplier AS "supplier",
+		a.deal_date AS "dealDate",
+		a.pass_date AS "passDate",
+		a.quantity AS "quantity",
+		a.unit_price AS "unitPrice",
+		a.plan_money AS "planMoney",
+		a.bidding_money AS "biddingMoney",
+		a.plan_count_number AS "planCountNumber",
+		a.contract_unit_price AS "contractUnitPrice",
+		a.contract_count_price AS "contractCountPrice",
+		a.receiving_number AS "receivingNumber",
+		a.receiving_price AS "receivingPrice",
+		a.invoice_number AS "invoiceNumber",
+		a.invoice_money AS "invoiceMoney",
+		a.plan_project_number AS "planProjectNumber",
+		a.sale_contract_money AS "saleContractMoney",
+		a.sale_contract_number AS "saleContractNumber",
+		a.sale_contract_unit_price AS "saleContractUnitPrice",
+		a.two_contract_count_price AS "twoContractCountPrice",
+		a.two_sale_contract_unit_price AS "twoSaleContractUnitPrice",
+		a.delivery_number AS "deliveryNumber",
+		a.no_delivery_number AS "noDeliveryNumber",
+		a.invoicing_number AS "invoicingNumber",
+		a.company_code AS "companyCode",
+		a.supplier_code AS "supplierCode",
+		a.supplier_name AS "supplierName",
+		a.dimension_time AS "dimensionTime",
+        ROW_NUMBER ( ) OVER ( ORDER BY contract_count_price :: FLOAT DESC) as "rowNumber"
+        FROM wz_procurement a
+        order by a.contract_count_price :: float desc limit 10
+    </select>
+
+</mapper>

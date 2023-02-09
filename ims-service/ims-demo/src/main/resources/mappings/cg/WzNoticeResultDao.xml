@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzNoticeResultDao">
+
+	<sql id="wzNoticeResultColumns">
+		a.id AS "id",
+		a.subcontract_number AS "subcontractNumber",
+		a.material_number AS "materialNumber",
+		a.plan_category_name AS "planCategoryName",
+		a.material_describe AS "materialDescribe",
+		a.demand_quantity AS "demandQuantity",
+		a.unit AS "unit",
+		a.supplier_name AS "supplierName",
+		a.supplier_price AS "supplierPrice",
+		a.substitute_name AS "substituteName",
+		a.substitute_price AS "substitutePrice",
+		a.parent_id AS "parentId",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="wzNoticeResultJoins">
+		LEFT JOIN wz_plan_result b ON b.id = a.parent_id
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+						<if test="parentId != null and parentId != ''">
+				AND a.parent_id = #{parentId}
+			</if>
+		    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzNoticeResult">
+		SELECT
+			<include refid="wzNoticeResultColumns"/>
+		FROM wz_notice_result a
+		<include refid="wzNoticeResultJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzNoticeResult">
+		SELECT
+			<include refid="wzNoticeResultColumns"/>
+		FROM wz_notice_result a
+		<include refid="wzNoticeResultJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzNoticeResult">
+		SELECT
+			<include refid="wzNoticeResultColumns"/>
+		FROM wz_notice_result a
+		<include refid="wzNoticeResultJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        subcontract_number,
+	        material_number,
+	        plan_category_name,
+	        material_describe,
+	        demand_quantity,
+	        unit,
+	        supplier_name,
+	        supplier_price,
+	        substitute_name,
+	        substitute_price,
+	        parent_id,
+	        tenant_id,
+	        create_by,
+	        create_by_name,
+	        create_date,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        del_flag
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_notice_result','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_notice_result(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{subcontractNumber},
+			#{materialNumber},
+			#{planCategoryName},
+			#{materialDescribe},
+			#{demandQuantity},
+			#{unit},
+			#{supplierName},
+			#{supplierPrice},
+			#{substituteName},
+			#{substitutePrice},
+			#{parentId},
+			#{tenantId},
+			#{createBy},
+			#{createByName},
+			#{createDate},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_notice_result','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_notice_result(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.subcontractNumber} as "subcontractNumber",
+                    #{item.materialNumber} as "materialNumber",
+                    #{item.planCategoryName} as "planCategoryName",
+                    #{item.materialDescribe} as "materialDescribe",
+                    #{item.demandQuantity} as "demandQuantity",
+                    #{item.unit} as "unit",
+                    #{item.supplierName} as "supplierName",
+                    #{item.supplierPrice} as "supplierPrice",
+                    #{item.substituteName} as "substituteName",
+                    #{item.substitutePrice} as "substitutePrice",
+                    #{item.parentId} as "parentId",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createByName} as "createByName",
+                    #{item.createDate} as "createDate",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.delFlag} as "delFlag"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_notice_result SET
+			id = #{id},
+			subcontract_number = #{subcontractNumber},
+			material_number = #{materialNumber},
+			plan_category_name = #{planCategoryName},
+			material_describe = #{materialDescribe},
+			demand_quantity = #{demandQuantity},
+			unit = #{unit},
+			supplier_name = #{supplierName},
+			supplier_price = #{supplierPrice},
+			substitute_name = #{substituteName},
+			substitute_price = #{substitutePrice},
+			parent_id = #{parentId},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_notice_result
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+				parent_id = #{parentId}
+			</otherwise>
+		</choose>
+	</update>
+
+</mapper>

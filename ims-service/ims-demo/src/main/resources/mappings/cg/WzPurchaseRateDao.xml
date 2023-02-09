@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzPurchaseRateDao">
+
+	<sql id="wzPurchaseRateColumns">
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag",
+		a.son_company_code AS "sonCompanyCode",
+		a.son_company_name AS "sonCompanyName",
+		a.jzcgl AS "jzcgl",
+		a.gkcgl AS "gkcgl",
+		a.swcgl AS "swcgl",
+		a.jtjzcgl AS "jtjzcgl",
+		a.jtgkcgl AS "jtgkcgl",
+		a.jtswcgl AS "jtswcgl",
+		a.score AS "score",
+		a.cgzje AS "cgzje",
+		a.gkcgje AS "gkcgje",
+		a.jzcgje AS "jzcgje",
+		a.dimension_time AS "dimensionTime"
+	</sql>
+
+	<sql id="wzPurchaseRateJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzPurchaseRate">
+		SELECT
+			<include refid="wzPurchaseRateColumns"/>
+		FROM wz_purchase_rate a
+		<include refid="wzPurchaseRateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzPurchaseRate">
+		SELECT
+			<include refid="wzPurchaseRateColumns"/>
+		FROM wz_purchase_rate a
+		<include refid="wzPurchaseRateJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzPurchaseRate">
+		SELECT
+			<include refid="wzPurchaseRateColumns"/>
+		FROM wz_purchase_rate a
+		<include refid="wzPurchaseRateJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        tenant_id,
+	        create_by,
+	        create_by_name,
+	        create_date,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        del_flag,
+	        son_company_code,
+	        son_company_name,
+	        jzcgl,
+	        gkcgl,
+	        swcgl,
+	        jtjzcgl,
+	        jtgkcgl,
+	        jtswcgl,
+	        score,
+	        cgzje,
+	        gkcgje,
+	        jzcgje,
+	        dimension_time
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_purchase_rate','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_purchase_rate(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{tenantId},
+			#{createBy},
+			#{createByName},
+			#{createDate},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{delFlag},
+			#{sonCompanyCode},
+			#{sonCompanyName},
+			#{jzcgl},
+			#{gkcgl},
+			#{swcgl},
+			#{jtjzcgl},
+			#{jtgkcgl},
+			#{jtswcgl},
+			#{score},
+			#{cgzje},
+			#{gkcgje},
+			#{jzcgje},
+			#{dimensionTime}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_purchase_rate','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_purchase_rate(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createByName} as "createByName",
+                    #{item.createDate} as "createDate",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.delFlag} as "delFlag",
+                    #{item.sonCompanyCode} as "sonCompanyCode",
+                    #{item.sonCompanyName} as "sonCompanyName",
+                    #{item.jzcgl} as "jzcgl",
+                    #{item.gkcgl} as "gkcgl",
+                    #{item.swcgl} as "swcgl",
+                    #{item.jtjzcgl} as "jtjzcgl",
+                    #{item.jtgkcgl} as "jtgkcgl",
+                    #{item.jtswcgl} as "jtswcgl",
+                    #{item.score} as "score",
+                    #{item.cgzje} as "cgzje",
+                    #{item.gkcgje} as "gkcgje",
+                    #{item.jzcgje} as "jzcgje",
+                    #{item.dimensionTime} as "dimensionTime"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_purchase_rate SET
+			id = #{id},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			son_company_code = #{sonCompanyCode},
+			son_company_name = #{sonCompanyName},
+			jzcgl = #{jzcgl},
+			gkcgl = #{gkcgl},
+			swcgl = #{swcgl},
+			jtjzcgl = #{jtjzcgl},
+			jtgkcgl = #{jtgkcgl},
+			jtswcgl = #{jtswcgl},
+			score = #{score},
+			cgzje = #{cgzje},
+			gkcgje = #{gkcgje},
+			jzcgje = #{jzcgje},
+			dimension_time = #{dimensionTime}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_purchase_rate
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+    <select id="getSelectIndexValue" resultType="WzPurchaseRate">
+        select
+        <include refid="wzPurchaseRateColumns"/>
+        FROM wz_purchase_rate a where 1 = 1
+        <if test="time !=null and time !=''">
+            <bind name="time" value="time+'%'"/>
+            and a.dimension_time like #{time}
+        </if>
+    </select>
+
+</mapper>

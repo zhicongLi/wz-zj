@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzEstablishmentDao">
+
+	<sql id="wzEstablishmentColumns">
+		a.id AS "id",
+		a.dept AS "dept",
+		a.project_name AS "projectName",
+		a.end_date AS "endDate",
+		a.budget AS "budget",
+		a.cost_source AS "costSource",
+		a.applicants AS "applicants",
+		a.phone_number AS "phoneNumber",
+		a.project_range AS "projectRange",
+		a.necessity AS "necessity",
+		a.submit_date AS "submitDate",
+		a.status AS "status",
+		a.bm_handler_opinion AS "bmHandlerOpinion",
+		a.bm_handler_people AS "bmHandlerPeople",
+		a.bm_handler_date AS "bmHandlerDate",
+		a.bm_responsible_opinion AS "bmResponsibleOpinion",
+		a.bm_responsible_people AS "bmResponsiblePeople",
+		a.bm_responsible_date AS "bmResponsibleDate",
+		a.cg__handler_opinion AS "cgHandlerOpinion",
+		a.cg_handler_people AS "cgHandlerPeople",
+		a.cg_handler_date AS "cgHandlerDate",
+		a.cg_responsible_opinion AS "cgResponsibleOpinion",
+		a.cg_responsible_people AS "cgResponsiblePeople",
+		a.cg_responsible_date AS "cgResponsibleDate",
+		a.fg_leader_opinion AS "fgLeaderOpinion",
+		a.fg_leader_people AS "fgLeaderPeople",
+		a.fg_leader_date AS "fgLeaderDate",
+		a.gs_responsible_opinion AS "gsResponsibleOpinion",
+		a.gs_responsible_people AS "gsResponsiblePeople",
+		a.gs_responsible_date AS "gsResponsibleDate",
+		a.copy AS "copy",
+		a.create_by_name AS "createByName",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName"
+	</sql>
+
+	<sql id="wzEstablishmentJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzEstablishment">
+		SELECT
+			<include refid="wzEstablishmentColumns"/>
+		FROM wz_establishment a
+		<include refid="wzEstablishmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzEstablishment">
+		SELECT
+			<include refid="wzEstablishmentColumns"/>
+		FROM wz_establishment a
+		<include refid="wzEstablishmentJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzEstablishment">
+		SELECT
+			<include refid="wzEstablishmentColumns"/>
+		FROM wz_establishment a
+		<include refid="wzEstablishmentJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        dept,
+	        project_name,
+	        end_date,
+	        budget,
+	        cost_source,
+	        applicants,
+	        phone_number,
+	        project_range,
+	        necessity,
+	        submit_date,
+	        status,
+	        bm_handler_opinion,
+	        bm_handler_people,
+	        bm_handler_date,
+	        bm_responsible_opinion,
+	        bm_responsible_people,
+	        bm_responsible_date,
+	        cg__handler_opinion,
+	        cg_handler_people,
+	        cg_handler_date,
+	        cg_responsible_opinion,
+	        cg_responsible_people,
+	        cg_responsible_date,
+	        fg_leader_opinion,
+	        fg_leader_people,
+	        fg_leader_date,
+	        gs_responsible_opinion,
+	        gs_responsible_people,
+	        gs_responsible_date,
+	        copy,
+	        create_by_name,
+	        tenant_id,
+	        create_by,
+	        create_date,
+	        del_flag,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_establishment','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_establishment(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{dept},
+			#{projectName},
+			#{endDate},
+			#{budget},
+			#{costSource},
+			#{applicants},
+			#{phoneNumber},
+			#{projectRange},
+			#{necessity},
+			#{submitDate},
+			#{status},
+			#{bmHandlerOpinion},
+			#{bmHandlerPeople},
+			#{bmHandlerDate},
+			#{bmResponsibleOpinion},
+			#{bmResponsiblePeople},
+			#{bmResponsibleDate},
+			#{cgHandlerOpinion},
+			#{cgHandlerPeople},
+			#{cgHandlerDate},
+			#{cgResponsibleOpinion},
+			#{cgResponsiblePeople},
+			#{cgResponsibleDate},
+			#{fgLeaderOpinion},
+			#{fgLeaderPeople},
+			#{fgLeaderDate},
+			#{gsResponsibleOpinion},
+			#{gsResponsiblePeople},
+			#{gsResponsibleDate},
+			#{copy},
+			#{createByName},
+			#{tenantId},
+			#{createBy},
+			#{createDate},
+			#{delFlag},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_establishment','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_establishment(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.dept} as "dept",
+                    #{item.projectName} as "projectName",
+                    #{item.endDate} as "endDate",
+                    #{item.budget} as "budget",
+                    #{item.costSource} as "costSource",
+                    #{item.applicants} as "applicants",
+                    #{item.phoneNumber} as "phoneNumber",
+                    #{item.projectRange} as "projectRange",
+                    #{item.necessity} as "necessity",
+                    #{item.submitDate} as "submitDate",
+                    #{item.status} as "status",
+                    #{item.bmHandlerOpinion} as "bmHandlerOpinion",
+                    #{item.bmHandlerPeople} as "bmHandlerPeople",
+                    #{item.bmHandlerDate} as "bmHandlerDate",
+                    #{item.bmResponsibleOpinion} as "bmResponsibleOpinion",
+                    #{item.bmResponsiblePeople} as "bmResponsiblePeople",
+                    #{item.bmResponsibleDate} as "bmResponsibleDate",
+                    #{item.cgHandlerOpinion} as "cgHandlerOpinion",
+                    #{item.cgHandlerPeople} as "cgHandlerPeople",
+                    #{item.cgHandlerDate} as "cgHandlerDate",
+                    #{item.cgResponsibleOpinion} as "cgResponsibleOpinion",
+                    #{item.cgResponsiblePeople} as "cgResponsiblePeople",
+                    #{item.cgResponsibleDate} as "cgResponsibleDate",
+                    #{item.fgLeaderOpinion} as "fgLeaderOpinion",
+                    #{item.fgLeaderPeople} as "fgLeaderPeople",
+                    #{item.fgLeaderDate} as "fgLeaderDate",
+                    #{item.gsResponsibleOpinion} as "gsResponsibleOpinion",
+                    #{item.gsResponsiblePeople} as "gsResponsiblePeople",
+                    #{item.gsResponsibleDate} as "gsResponsibleDate",
+                    #{item.copy} as "copy",
+                    #{item.createByName} as "createByName",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createDate} as "createDate",
+                    #{item.delFlag} as "delFlag",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_establishment SET
+			id = #{id},
+			dept = #{dept},
+			project_name = #{projectName},
+			end_date = #{endDate},
+			budget = #{budget},
+			cost_source = #{costSource},
+			applicants = #{applicants},
+			phone_number = #{phoneNumber},
+			project_range = #{projectRange},
+			necessity = #{necessity},
+			submit_date = #{submitDate},
+			status = #{status},
+			bm_handler_opinion = #{bmHandlerOpinion},
+			bm_handler_people = #{bmHandlerPeople},
+			bm_handler_date = #{bmHandlerDate},
+			bm_responsible_opinion = #{bmResponsibleOpinion},
+			bm_responsible_people = #{bmResponsiblePeople},
+			bm_responsible_date = #{bmResponsibleDate},
+			cg__handler_opinion = #{cgHandlerOpinion},
+			cg_handler_people = #{cgHandlerPeople},
+			cg_handler_date = #{cgHandlerDate},
+			cg_responsible_opinion = #{cgResponsibleOpinion},
+			cg_responsible_people = #{cgResponsiblePeople},
+			cg_responsible_date = #{cgResponsibleDate},
+			fg_leader_opinion = #{fgLeaderOpinion},
+			fg_leader_people = #{fgLeaderPeople},
+			fg_leader_date = #{fgLeaderDate},
+			gs_responsible_opinion = #{gsResponsibleOpinion},
+			gs_responsible_people = #{gsResponsiblePeople},
+			gs_responsible_date = #{gsResponsibleDate},
+			copy = #{copy},
+			tenant_id = #{tenantId}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_establishment
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+</mapper>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzSupplierManagementDao">
+
+	<sql id="wzSupplierManagementColumns">
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag",
+		a.sxxwcz_number AS "sxxwczNumber",
+		a.sxxwcz_title AS "sxxwczTitle",
+		a.project_number AS "projectNumber",
+		a.project_name AS "projectName",
+		a.project_dept AS "projectDept",
+		a.supplier_code AS "supplierCode",
+		a.supplier_name AS "supplierName",
+		a.supplier_credit_code AS "supplierCreditCode",
+		a.discredit_type AS "discreditType",
+		a.xgdw_proposal AS "xgdwProposal",
+		a.end_result AS "endResult",
+		a.end_proposal AS "endProposal",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.bcz_reason AS "bczReason",
+		a.status AS "status",
+		a.dimension_time as "dimensionTime"
+	</sql>
+
+	<sql id="wzSupplierManagementJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzSupplierManagement">
+		SELECT
+			<include refid="wzSupplierManagementColumns"/>
+		FROM wz_supplier_management a
+		<include refid="wzSupplierManagementJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzSupplierManagement">
+		SELECT
+			<include refid="wzSupplierManagementColumns"/>
+		FROM wz_supplier_management a
+		<include refid="wzSupplierManagementJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzSupplierManagement">
+		SELECT
+			<include refid="wzSupplierManagementColumns"/>
+		FROM wz_supplier_management a
+		<include refid="wzSupplierManagementJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        tenant_id,
+	        create_by,
+	        create_by_name,
+	        create_date,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        del_flag,
+	        sxxwcz_number,
+	        sxxwcz_title,
+	        project_number,
+	        project_name,
+	        project_dept,
+	        supplier_code,
+	        supplier_name,
+	        supplier_credit_code,
+	        discredit_type,
+	        xgdw_proposal,
+	        end_result,
+	        end_proposal,
+	        start_date,
+	        end_date,
+	        bcz_reason,
+	        status,
+	        dimension_time
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_supplier_management','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_supplier_management(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{tenantId},
+			#{createBy},
+			#{createByName},
+			#{createDate},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{delFlag},
+			#{sxxwczNumber},
+			#{sxxwczTitle},
+			#{projectNumber},
+			#{projectName},
+			#{projectDept},
+			#{supplierCode},
+			#{supplierName},
+			#{supplierCreditCode},
+			#{discreditType},
+			#{xgdwProposal},
+			#{endResult},
+			#{endProposal},
+			#{startDate},
+			#{endDate},
+			#{bczReason},
+			#{status},
+			#{dimensionTime}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_supplier_management','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_supplier_management(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createByName} as "createByName",
+                    #{item.createDate} as "createDate",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.delFlag} as "delFlag",
+                    #{item.sxxwczNumber} as "sxxwczNumber",
+                    #{item.sxxwczTitle} as "sxxwczTitle",
+                    #{item.projectNumber} as "projectNumber",
+                    #{item.projectName} as "projectName",
+                    #{item.projectDept} as "projectDept",
+                    #{item.supplierCode} as "supplierCode",
+                    #{item.supplierName} as "supplierName",
+                    #{item.supplierCreditCode} as "supplierCreditCode",
+                    #{item.discreditType} as "discreditType",
+                    #{item.xgdwProposal} as "xgdwProposal",
+                    #{item.endResult} as "endResult",
+                    #{item.endProposal} as "endProposal",
+                    #{item.startDate} as "startDate",
+                    #{item.endDate} as "endDate",
+                    #{item.bczReason} as "bczReason",
+                    #{item.status} as "status",
+                    #{item.dimensionTime} as "dimensionTime"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_supplier_management SET
+			id = #{id},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			sxxwcz_number = #{sxxwczNumber},
+			sxxwcz_title = #{sxxwczTitle},
+			project_number = #{projectNumber},
+			project_name = #{projectName},
+			project_dept = #{projectDept},
+			supplier_code = #{supplierCode},
+			supplier_name = #{supplierName},
+			supplier_credit_code = #{supplierCreditCode},
+			discredit_type = #{discreditType},
+			xgdw_proposal = #{xgdwProposal},
+			end_result = #{endResult},
+			end_proposal = #{endProposal},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			bcz_reason = #{bczReason},
+			status = #{status},
+			dimension_time = #{dimensionTime}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_supplier_management
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+</mapper>

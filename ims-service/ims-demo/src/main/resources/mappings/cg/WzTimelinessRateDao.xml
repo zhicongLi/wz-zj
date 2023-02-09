@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzTimelinessRateDao">
+
+	<sql id="wzTimelinessRateColumns">
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag",
+		a.system_name AS "systemName",
+		a.model_name AS "modelName",
+		a.dept_name AS "deptName",
+		a.year AS "year",
+		a.month AS "month",
+		a.index_name AS "indexName",
+		a.index_code AS "indexCode",
+		a.index_value AS "indexValue",
+		a.index_weight AS "indexWeight",
+		a.index_dept AS "indexDept",
+		a.index_purpose AS "indexPurpose",
+		a.create_time AS "createTime",
+		a.index_denominator AS "indexDenominator",
+		a.denominator AS "denominator",
+		a.indicator_molecule AS "indicatorMolecule",
+		a.molecule AS "molecule",
+		a.frequency AS "frequency",
+		a.evaluation_dimension AS "evaluationDimension",
+		a.remark AS "remark",
+		a.dimension_time AS "dimensionTime"
+	</sql>
+
+	<sql id="wzTimelinessRateJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzTimelinessRate">
+		SELECT
+			<include refid="wzTimelinessRateColumns"/>
+		FROM wz_timeliness_rate a
+		<include refid="wzTimelinessRateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzTimelinessRate">
+		SELECT
+			<include refid="wzTimelinessRateColumns"/>
+		FROM wz_timeliness_rate a
+		<include refid="wzTimelinessRateJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzTimelinessRate">
+		SELECT
+			<include refid="wzTimelinessRateColumns"/>
+		FROM wz_timeliness_rate a
+		<include refid="wzTimelinessRateJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        tenant_id,
+	        create_by,
+	        create_by_name,
+	        create_date,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        del_flag,
+	        system_name,
+	        model_name,
+	        dept_name,
+	        year,
+	        month,
+	        index_name,
+	        index_code,
+	        index_value,
+	        index_weight,
+	        index_dept,
+	        index_purpose,
+	        create_time,
+	        index_denominator,
+	        denominator,
+	        indicator_molecule,
+	        molecule,
+	        frequency,
+	        evaluation_dimension,
+	        remark,
+	        dimension_time
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_timeliness_rate','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_timeliness_rate(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{tenantId},
+			#{createBy},
+			#{createByName},
+			#{createDate},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{delFlag},
+			#{systemName},
+			#{modelName},
+			#{deptName},
+			#{year},
+            #{month},
+            #{indexName},
+            #{indexCode},
+            #{indexValue},
+            #{indexWeight},
+            #{indexDept},
+            #{indexPurpose},
+            #{createTime},
+            #{indexDenominator},
+			#{denominator},
+			#{indicatorMolecule},
+			#{molecule},
+			#{frequency},
+			#{evaluationDimension},
+			#{remark},
+			#{dimensionTime}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_timeliness_rate','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_timeliness_rate(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createByName} as "createByName",
+                    #{item.createDate} as "createDate",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.delFlag} as "delFlag",
+                    #{item.systemName} as "systemName",
+                    #{item.modelName} as "modelName",
+                    #{item.deptName} as "deptName",
+                    #{item.year} as "year",
+                    #{item.month} as "month",
+                    #{item.indexName} as "indexName",
+                    #{item.indexCode} as "indexCode",
+                    #{item.indexValue} as "indexValue",
+                    #{item.indexWeight} as "indexWeight",
+                    #{item.indexDept} as "indexDept",
+                    #{item.indexPurpose} as "indexPurpose",
+                    #{item.createTime} as "createTime",
+                    #{item.indexDenominator} as "indexDenominator",
+                    #{item.denominator} as "denominator",
+                    #{item.indicatorMolecule} as "indicatorMolecule",
+                    #{item.molecule} as "molecule",
+                    #{item.frequency} as "frequency",
+                    #{item.evaluationDimension} as "evaluationDimension",
+                    #{item.remark} as "remark",
+                    #{item.dimensionTime} as "dimensionTime"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_timeliness_rate SET
+			id = #{id},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			system_name = #{systemName},
+			model_name = #{modelName},
+			dept_name = #{deptName},
+			year = #{year},
+			month = #{month},
+			index_name = #{indexName},
+			index_code = #{indexCode},
+			index_value = #{indexValue},
+			index_weight = #{indexWeight},
+			index_dept = #{indexDept},
+			index_purpose = #{indexPurpose},
+			create_time = #{createTime},
+			index_denominator = #{indexDenominator},
+			denominator = #{denominator},
+			indicator_molecule = #{indicatorMolecule},
+			molecule = #{molecule},
+			frequency = #{frequency},
+			evaluation_dimension = #{evaluationDimension},
+			remark = #{remark},
+			dimension_time = #{dimensionTime}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_timeliness_rate
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+</mapper>

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ims.wz.cg.dao.WzTopicsResultDao">
+
+	<sql id="wzTopicsResultColumns">
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.create_by AS "createBy",
+		a.create_by_name AS "createByName",
+		a.create_date AS "createDate",
+		a.create_dept AS "createDept",
+		a.create_dept_name AS "createDeptName",
+		a.create_company AS "createCompany",
+		a.create_company_name AS "createCompanyName",
+		a.update_by AS "updateBy",
+		a.update_by_name AS "updateByName",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.create_name AS "createName",
+		a.apply_date AS "applyDate",
+		a.apply_name AS "applyName",
+		a.xqbm_name AS "xqbmName",
+		a.xqbm_date AS "xqbmDate",
+		a.xqbm_approval AS "xqbmApproval",
+		a.cgbm_name AS "cgbmName",
+		a.cgbm_date AS "cgbmDate",
+		a.cgbm_approval AS "cgbmApproval",
+		a.fgld_name AS "fgldName",
+		a.fgld_date AS "fgldDate",
+		a.fgld_approval AS "fgldApproval",
+		a.zjl_name AS "zjlName",
+		a.zjl_date AS "zjlDate",
+		a.zjl_approval AS "zjlApproval",
+		a.apply_end_date AS "applyEndDate",
+		a.status AS "status",
+		a.topics_status AS "topicsStatus"
+	</sql>
+
+	<sql id="wzTopicsResultJoins">
+	</sql>
+    <sql id="whereStr">
+			a.del_flag = #{DEL_FLAG_NORMAL}
+					    <!-- 快速定位 -->
+			<if test="sqlMap.key != null and  sqlMap.key  != ''">
+			  AND (
+			  )
+			</if>
+		    <!-- 高级查询dataFilter -->
+			<if test="sqlMap.df != null and  sqlMap.df  != ''">
+			   AND ( ${sqlMap.df} )
+			</if>
+		    <!-- 默认查询baseFilter -->
+			<if test="sqlMap.bf != null and  sqlMap.bf  != ''">
+			   AND ( ${sqlMap.bf} )
+			</if>
+		    <!-- 基本Query查询 -->
+			<if test="sqlMap.baseQuery != null and  sqlMap.baseQuery  != ''">
+			   AND ( ${sqlMap.baseQuery} )
+			</if>
+		    <!-- 特定Query查询 -->
+			<if test="sqlMap.specQuery != null and  sqlMap.specQuery  != ''">
+			   AND ( ${sqlMap.specQuery} )
+			</if>
+			<if test="sqlMap.dsf != null and  sqlMap.dsf  != ''">
+				AND (${sqlMap.dsf})
+			</if>
+    </sql>
+
+	<select id="get" resultType="WzTopicsResult">
+		SELECT
+			<include refid="wzTopicsResultColumns"/>
+		FROM wz_topics_result a
+		<include refid="wzTopicsResultJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="WzTopicsResult">
+		SELECT
+			<include refid="wzTopicsResultColumns"/>
+		FROM wz_topics_result a
+		<include refid="wzTopicsResultJoins"/>
+		<where>
+              <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+                order by status
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="WzTopicsResult">
+		SELECT
+			<include refid="wzTopicsResultColumns"/>
+		FROM wz_topics_result a
+		<include refid="wzTopicsResultJoins"/>
+		<where>
+			 <include refid="whereStr"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <sql id="insertColumns">
+	        id,
+	        tenant_id,
+	        create_by,
+	        create_by_name,
+	        create_date,
+	        create_dept,
+	        create_dept_name,
+	        create_company,
+	        create_company_name,
+	        update_by,
+	        update_by_name,
+	        del_flag,
+	        code,
+	        create_name,
+	        apply_date,
+	        apply_name,
+	        xqbm_name,
+	        xqbm_date,
+	        xqbm_approval,
+	        cgbm_name,
+	        cgbm_date,
+	        cgbm_approval,
+	        fgld_name,
+	        fgld_date,
+	        fgld_approval,
+	        zjl_name,
+	        zjl_date,
+	        zjl_approval,
+	        apply_end_date,
+	        status,
+	        topics_status
+    </sql>
+
+	<insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_topics_result','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_topics_result(
+            <include refid="insertColumns"/>
+		) VALUES (
+			#{id},
+			#{tenantId},
+			#{createBy},
+			#{createByName},
+			#{createDate},
+			#{createDept},
+			#{createDeptName},
+			#{createCompany},
+			#{createCompanyName},
+			#{updateBy},
+			#{updateByName},
+			#{delFlag},
+			#{code},
+			#{createName},
+			#{applyDate},
+			#{applyName},
+			#{xqbmName},
+			#{xqbmDate},
+			#{xqbmApproval},
+			#{cgbmName},
+			#{cgbmDate},
+			#{cgbmApproval},
+			#{fgldName},
+			#{fgldDate},
+			#{fgldApproval},
+			#{zjlName},
+			#{zjlDate},
+			#{zjlApproval},
+			#{applyEndDate},
+			#{status},
+			#{topicsStatus}
+		)
+	</insert>
+
+	<insert id="insertList">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+          <choose>
+			<when test="id == null or  id  == ''">
+              select get_next_id('wz_topics_result','') from dual
+			</when>
+			<otherwise>
+			  select #{id} from dual
+			</otherwise>
+	      </choose>
+        </selectKey>
+		INSERT INTO wz_topics_result(
+		    <include refid="insertColumns"/>
+		) select FFF.* from (
+            <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+                select
+                    #{item.id} as "id",
+                    #{item.tenantId} as "tenantId",
+                    #{item.createBy} as "createBy",
+                    #{item.createByName} as "createByName",
+                    #{item.createDate} as "createDate",
+                    #{item.createDept} as "createDept",
+                    #{item.createDeptName} as "createDeptName",
+                    #{item.createCompany} as "createCompany",
+                    #{item.createCompanyName} as "createCompanyName",
+                    #{item.updateBy} as "updateBy",
+                    #{item.updateByName} as "updateByName",
+                    #{item.delFlag} as "delFlag",
+                    #{item.code} as "code",
+                    #{item.createName} as "createName",
+                    #{item.applyDate} as "applyDate",
+                    #{item.applyName} as "applyName",
+                    #{item.xqbmName} as "xqbmName",
+                    #{item.xqbmDate} as "xqbmDate",
+                    #{item.xqbmApproval} as "xqbmApproval",
+                    #{item.cgbmName} as "cgbmName",
+                    #{item.cgbmDate} as "cgbmDate",
+                    #{item.cgbmApproval} as "cgbmApproval",
+                    #{item.fgldName} as "fgldName",
+                    #{item.fgldDate} as "fgldDate",
+                    #{item.fgldApproval} as "fgldApproval",
+                    #{item.zjlName} as "zjlName",
+                    #{item.zjlDate} as "zjlDate",
+                    #{item.zjlApproval} as "zjlApproval",
+                    #{item.applyEndDate} as "applyEndDate",
+                    #{item.status} as "status",
+                    #{item.topicsStatus} as "topicsStatus"
+                from dual
+            </foreach>
+		) FFF
+
+	</insert>
+
+	<update id="update">
+		UPDATE wz_topics_result SET
+			id = #{id},
+			tenant_id = #{tenantId},
+			update_by = #{updateBy},
+			update_by_name = #{updateByName},
+			code = #{code},
+			create_name = #{createName},
+			apply_date = #{applyDate},
+			apply_name = #{applyName},
+			xqbm_name = #{xqbmName},
+			xqbm_date = #{xqbmDate},
+			xqbm_approval = #{xqbmApproval},
+			cgbm_name = #{cgbmName},
+			cgbm_date = #{cgbmDate},
+			cgbm_approval = #{cgbmApproval},
+			fgld_name = #{fgldName},
+			fgld_date = #{fgldDate},
+			fgld_approval = #{fgldApproval},
+			zjl_name = #{zjlName},
+			zjl_date = #{zjlDate},
+			zjl_approval = #{zjlApproval},
+			apply_end_date = #{applyEndDate},
+			status = #{status},
+			topics_status = #{topicsStatus}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM wz_topics_result
+	    WHERE
+		<choose>
+			<when test="id != null and  id  != ''">
+					 id = #{id}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</update>
+
+    <select id="getMaxCode" resultType="String">
+        select max(reverse(substr(reverse(code),1,3))) from wz_topics_result where 1=1
+        <if test="createDate !=null and createDate !=''">
+            <bind name="day" value="createDate+'%'"/>
+            and create_date like #{day}
+        </if>
+
+    </select>
+
+</mapper>
